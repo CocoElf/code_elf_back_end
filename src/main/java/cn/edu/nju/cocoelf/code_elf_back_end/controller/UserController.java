@@ -30,7 +30,8 @@ public class UserController {
      */
     @PostMapping("/signUp")
     public String signUp(String username, String email, String password) {
-        return JSON.toJSONString(userService.signIn(username, email, password));
+        return "";
+//        return JSON.toJSONString(userService.signIn(username, email, password));
     }
 
     /**
