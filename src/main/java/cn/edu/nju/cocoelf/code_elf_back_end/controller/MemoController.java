@@ -1,8 +1,11 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
+import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/memo", produces = "application/json;charset=UTF-8")
@@ -14,7 +17,7 @@ public class MemoController {
      * @return {{memo1}, {memo2}, ...}
      */
     @PostMapping("/memoList")
-    public String getMemoList(String signature) {
+    public List<MemoModel> getMemoList(String signature) {
         return null;
     }
 
@@ -25,7 +28,7 @@ public class MemoController {
      * @return memo model
      */
     @PostMapping("/memoDetail")
-    public String getMemoDetail(String memoId, String signature) {
+    public MemoModel getMemoDetail(String memoId, String signature) {
         return null;
     }
 
@@ -36,7 +39,7 @@ public class MemoController {
      * @return 被添加的memo model
      */
     @PostMapping("/addMemo")
-    public String addMemo(String memoText, String signature) {
+    public MemoModel addMemo(String memoText, String signature) {
         return null;
     }
 
@@ -48,7 +51,7 @@ public class MemoController {
      * @return 编辑后的memo model
      */
     @PostMapping("/editMemo")
-    public String editMemo(String memoText, String memoId, String signature) {
+    public MemoModel editMemo(String memoText, String memoId, String signature) {
         return null;
     }
 }

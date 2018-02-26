@@ -1,6 +1,8 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.config.param.CodeType;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.TipModel;
+import com.sun.org.glassfish.external.statistics.Statistic;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,7 @@ public class TimingController {
      * @return 建议
      */
     @PostMapping("/tips")
-    public String getTips(CodeType codeType, Long codeTime, String signature) {
+    public TipModel getTips(CodeType codeType, Long codeTime, String signature) {
         return null;
     }
 
@@ -30,7 +32,7 @@ public class TimingController {
      * @return 是否成功
      */
     @PostMapping("/startTiming")
-    public String startTiming(CodeType codeType, String signature) {
+    public Boolean startTiming(CodeType codeType, String signature) {
         return null;
     }
 
@@ -41,7 +43,7 @@ public class TimingController {
      * @return 是否成功
      */
     @PostMapping("/endTiming")
-    public String endTiming(CodeType codeType, String signature) {
+    public Boolean endTiming(CodeType codeType, String signature) {
         return null;
     }
 
@@ -53,7 +55,7 @@ public class TimingController {
      * @return 统计数据
      */
     @PostMapping("/statistic")
-    public String getStatistic(Date fromDate, Date toDate, String signature) {
+    public Statistic getStatistic(Date fromDate, Date toDate, String signature) {
         return null;
     }
 }
