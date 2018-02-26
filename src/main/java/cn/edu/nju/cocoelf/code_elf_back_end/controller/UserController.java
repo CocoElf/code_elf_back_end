@@ -1,14 +1,13 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.config.param.ResultMessage;
+import cn.edu.nju.cocoelf.code_elf_back_end.json.UserJson;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.UserModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.SignatureUtil;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -23,14 +22,16 @@ public class UserController {
 
     /**
      * 注册
-     * @param username 用户名，可重复
-     * @param email 用户邮箱，不可重复
-     * @param password 用户密码
      * @return 是否注册成功 "SUCCESS, "FAIL"
      */
     @PostMapping("/signUp")
-    public String signUp(String username, String email, String password) {
-        return JSON.toJSONString(userService.signIn(username, email, password));
+    @ResponseBody
+    public UserJson signUp(@RequestBody UserJson userJson) {
+        System.out.println(userJson);
+//        return JSON.toJSONString(userService.signIn(username, email, password));
+        userJson.setUsername("123");
+        userJson.setUsername("dd");
+        return userJson;
     }
 
     /**
