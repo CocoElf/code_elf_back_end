@@ -31,7 +31,7 @@ public class SearchApi {
 // **********************************************
 
     // Replace the subscriptionKey string value with your valid subscription key.
-    static String subscriptionKey = "e0f34a3f4181471b8c52e9eb1a23aec2";
+    static String subscriptionKey = "186ffcb720494b1a98edbe0df7713b14";
 
     // Verify the endpoint URI.  At this writing, only one endpoint is used for Bing
     // search APIs.  In the future, regional endpoints may be available.  If you
