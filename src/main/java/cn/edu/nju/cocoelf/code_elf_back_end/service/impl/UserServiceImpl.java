@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel veryUser(String username, String password) {
-        User user = userRepository.findByEmailAndPassword(username, password);
+        User user = userRepository.findByUsernameAndPassword(username, password);
         return toModel(user);
     }
 
