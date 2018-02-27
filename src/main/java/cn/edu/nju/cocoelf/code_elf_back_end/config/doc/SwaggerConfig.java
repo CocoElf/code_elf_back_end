@@ -18,7 +18,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.edu.nju.wonderland.ucountserver"))
+                .apis(RequestHandlerSelectors.basePackage("cn.edu.nju.cocoelf.code_elf_back_end.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
