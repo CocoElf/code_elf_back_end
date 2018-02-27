@@ -40,7 +40,7 @@ public class pythonApiSearch {
         return page.asXml();
     }
 
-    public static void  getContentList(String html, String baseurl){
+    public static void  getContentList(String html, String baseUrl){
         Document doc = Jsoup.parse(html,"UTF-8");
         org.jsoup.nodes.Element content = doc.getElementById("search-results");
         List<APISearchTitle> apiSearchTitleList =  new ArrayList<>();
@@ -54,7 +54,7 @@ public class pythonApiSearch {
                continue;
            Element a = single.getElementsByTag("a").first();
            String show = a.text()+span.text().trim();
-           String url = baseurl+a.attr("href");
+           String url = baseUrl+a.attr("href");
            APISearchTitle apiSearchTitle = new APISearchTitle(show,url);
 
         }
