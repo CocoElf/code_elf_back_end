@@ -41,12 +41,12 @@ public enum Language implements LanguageFunction {
 
         @Override
         public String getBaseURL() {
-            return "/api/python3/";
+            return "file:///api/python3/";
         }
 
         @Override
         public String getSearchURL(String keyword) {
-            return "api/python3/search.html?q="+keyword;
+            return "file:///Users/wshwbluebird/javaNeon/code_elf_back_end/api/python3/search.html?q="+keyword;
         }
     };
 
