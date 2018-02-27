@@ -32,7 +32,7 @@ public class SearchApi {
 // **********************************************
 
     // Replace the subscriptionKey string value with your valid subscription key.
-    static String subscriptionKey = "186ffcb720494b1a98edbe0df7713b14";
+    static String subscriptionKey = "6374bb8323af4b189c338460ada5465c";
 
     // Verify the endpoint URI.  At this writing, only one endpoint is used for Bing
     // search APIs.  In the future, regional endpoints may be available.  If you
@@ -49,9 +49,8 @@ public class SearchApi {
         // construct URL of search request (endpoint + query string)
         URIBuilder ub = new URIBuilder(host+path);
         ub.addParameter("q", searchTerm);
-        ub.addParameter(count,"3");
+        ub.addParameter(count,"1");
         ub.addParameter(ansCount,"1");
-        ub.addParameter("mkt","zh-CN");
         URL url = new URL(ub.toString());
         System.out.println(url.toString());
 //        URL url = new URL(host + path + "?q=" +  URLEncoder.encode(searchQuery, "UTF-8")+count+"2");
@@ -80,14 +79,6 @@ public class SearchApi {
         return results;
     }
 
-    // pretty-printer for JSON; uses GSON parser to parse and re-serialize
-    public static String prettify(String json_text) {
-        JsonParser parser = new JsonParser();
-        JsonObject json = parser.parse(json_text).getAsJsonObject();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(json);
-    }
-
     public static void main (String[] args) {
         if (subscriptionKey.length() != 32) {
             System.out.println("Invalid Bing Search API subscription key!");
@@ -105,7 +96,7 @@ public class SearchApi {
                 System.out.println(header + ": " + result.relevantHeaders.get(header));
 
             System.out.println("\nJSON Response:\n");
-            System.out.println(prettify(result.jsonResponse));
+            System.out.println(result.pureResult);
         }
         catch (Exception e) {
             e.printStackTrace(System.out);
@@ -118,8 +109,12 @@ public class SearchApi {
 class SearchResults{
     HashMap<String, String> relevantHeaders;
     String jsonResponse;
+    String pureResult;
     SearchResults(HashMap<String, String> headers, String json) {
         relevantHeaders = headers;
         jsonResponse = json;
+        int begin = json.indexOf("\"value\":") + 9;
+        int end = json.indexOf("\"relatedSearches\":") - 3;
+        pureResult = jsonResponse.substring(begin, end);
     }
 }
