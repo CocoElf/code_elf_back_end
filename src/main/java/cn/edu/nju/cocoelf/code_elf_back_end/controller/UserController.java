@@ -32,7 +32,7 @@ public class UserController {
 
     @PostMapping("/userDetail")
     public UserModel getUserDetail(String username) {
-        return userService.getUserDetail();
+        return userService.getUserDetail(username);
     }
 
 
