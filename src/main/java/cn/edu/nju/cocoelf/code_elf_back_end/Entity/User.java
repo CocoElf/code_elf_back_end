@@ -7,19 +7,9 @@ import javax.persistence.Id;
 public class User {
 
     @Id
-    private String email;
-
     private String username;
 
     private String password;
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getUsername() {
         return username;
@@ -39,6 +29,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "email='" + email + '\'' + ", username='" + username + '\'' + ", password='" + password + '\'' + '}';
+        return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + '}';
     }
 }

@@ -5,11 +5,11 @@ import cn.edu.nju.cocoelf.code_elf_back_end.model.UserModel;
 
 public interface UserService {
 
-    boolean veryUser(String email, String password);
+    UserModel veryUser(String username, String password);
 
-    ResultMessage signUp(String email, String username, String password);
+    UserModel signUp(String username, String password);
 
-    UserModel getUserDetail(String email);
+    UserModel getUserDetail(String username);
 
-    UserModel ModifyUser(UserModel userModel);
+    UserModel modifyUser(UserModel userModel);
 }

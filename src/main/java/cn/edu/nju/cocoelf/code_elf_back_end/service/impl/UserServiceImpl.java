@@ -2,6 +2,8 @@ package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.Entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.config.param.ResultMessage;
+import cn.edu.nju.cocoelf.code_elf_back_end.exception.ResourceConflictException;
+import cn.edu.nju.cocoelf.code_elf_back_end.exception.ResourceNotFoundException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.UserModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.UserRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
@@ -15,49 +17,47 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public boolean veryUser(String email, String password) {
-        User user = userRepository.findByEmailAndPassword(email, password);
-        return user != null && user.getEmail() != null;
+    public UserModel veryUser(String username, String password) {
+        User user = userRepository.findByEmailAndPassword(username, password);
+        return toModel(user);
     }
 
     @Override
-    public ResultMessage signUp(String email, String username, String password) {
-        User user = userRepository.findOne(email);
-        if (user != null && user.getEmail() != null) {
-            user = new User();
-            user.setEmail(email);
-            user.setUsername(username);
-            user.setPassword(password);
-            userRepository.save(user);
-            return ResultMessage.SUCCESS;
+    public UserModel signUp(String username, String password) {
+        User user = userRepository.findOne(username);
+        if (user != null && user.getUsername() != null) {
+            throw new ResourceConflictException("用户名重复");
         }
-        return ResultMessage.FAIL;
+        user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user = userRepository.save(user);
+        return  toModel(user);
     }
 
     @Override
-    public UserModel getUserDetail(String email) {
-        return toModel(userRepository.findOne(email));
+    public UserModel getUserDetail(String username) {
+        return toModel(userRepository.findOne(username));
     }
 
     @Override
-    public UserModel ModifyUser(UserModel userModel) {
+    public UserModel modifyUser(UserModel userModel) {
         return toModel(userRepository.saveAndFlush(toEntity(userModel)));
     }
 
     private UserModel toModel(User user) {
         UserModel userModel = new UserModel();
-        if (user != null && user.getEmail() != null) {
-            userModel.setEmail(user.getEmail());
-            userModel.setUsername(user.getUsername());
+        if (user == null || user.getUsername() == null) {
+           throw new ResourceNotFoundException("没有找到此用户");
         }
+        userModel.setUsername(user.getUsername());
         return userModel;
     }
 
     private User toEntity(UserModel userModel) {
-        User user = new User();
-        if (userModel != null && userModel.getEmail() != null) {
-            user.setEmail(userModel.getEmail());
-            user.setUsername(userModel.getUsername());
+        User user = userRepository.findOne(userModel.getUsername());
+        if (user == null || user.getUsername() == null) {
+            throw new ResourceNotFoundException("没有找到此用户");
         }
         return user;
     }
