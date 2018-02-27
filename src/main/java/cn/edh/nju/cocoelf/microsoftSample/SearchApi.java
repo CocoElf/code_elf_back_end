@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.http.client.utils.URIBuilder;
 
 public class SearchApi {
 
@@ -41,15 +42,25 @@ public class SearchApi {
     static String path = "/bing/v7.0/search";
 
     static String searchTerm = "python calculus";
-    static String count = "&answerCount=2";
+    static String count = "count";
+    static String ansCount = "ansCount";
 
     public static SearchResults SearchWeb (String searchQuery) throws Exception {
         // construct URL of search request (endpoint + query string)
-        URL url = new URL(host + path + "?q=" +  URLEncoder.encode(searchQuery, "UTF-8")+count);
+        URIBuilder ub = new URIBuilder(host+path);
+        ub.addParameter("q", searchTerm);
+        ub.addParameter(count,"3");
+        ub.addParameter(ansCount,"1");
+        ub.addParameter("mkt","zh-CN");
+        URL url = new URL(ub.toString());
+        System.out.println(url.toString());
+//        URL url = new URL(host + path + "?q=" +  URLEncoder.encode(searchQuery, "UTF-8")+count+"2");
+
         HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);
+//        connection.addRequestProperty("answerCount","2");
 
-        // receive JSON body
+        // receive JSON bod
         InputStream stream = connection.getInputStream();
         String response = new Scanner(stream).useDelimiter("\\A").next();
 
