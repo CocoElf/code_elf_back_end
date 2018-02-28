@@ -1,7 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
-import cn.edu.nju.cocoelf.code_elf_back_end.Entity.User;
-import cn.edu.nju.cocoelf.code_elf_back_end.config.param.ResultMessage;
+import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.ResourceConflictException;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.ResourceNotFoundException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.UserModel;

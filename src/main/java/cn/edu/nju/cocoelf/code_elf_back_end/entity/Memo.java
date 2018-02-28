@@ -1,8 +1,10 @@
-package cn.edu.nju.cocoelf.code_elf_back_end.model;
+package cn.edu.nju.cocoelf.code_elf_back_end.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
-public class MemoModel {
+@Entity
+public class Memo {
 
     private String name;
 
@@ -12,9 +14,15 @@ public class MemoModel {
 
     private String keyWord;
 
+    @Column(name = "`date`")
     private Date date;
 
+    @Id
     private Integer memoId;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "username")
+    private User user;
 
     public String getName() {
         return name;
@@ -64,9 +72,17 @@ public class MemoModel {
         this.memoId = memoId;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
-        return "MemoModel{" + "name='" + name + '\'' + ", snippet='" + snippet + '\'' + ", url='" + url + '\'' + ", " +
-                "keyWord='" + keyWord + '\'' + ", date=" + date + ", memoId=" + memoId + '}';
+        return "Memo{" + "name='" + name + '\'' + ", snippet='" + snippet + '\'' + ", url='" + url + '\'' + ", " +
+                "keyWord='" + keyWord + '\'' + ", date=" + date + ", memoId=" + memoId + ", user=" + user + '}';
     }
 }

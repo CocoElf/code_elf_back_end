@@ -30,6 +30,7 @@ public class SearchServiceImpl implements SearchService {
         try {
             searchResult = SearchUtil.SearchWeb(akeyWord, 100).pureResult;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new InvalidRequestException("搜索api出bug了");
         }
         System.out.println(searchResult);

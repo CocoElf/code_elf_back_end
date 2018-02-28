@@ -8,6 +8,12 @@ public class QueryResultModel {
 
     private String url;
 
+    public QueryResultModel() {
+    }
+
+    public QueryResultModel(String name, String snippet, String url) {
+    }
+
     public String getName() {
         return name;
     }
