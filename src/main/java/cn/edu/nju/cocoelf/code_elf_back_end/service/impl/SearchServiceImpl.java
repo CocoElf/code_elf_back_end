@@ -42,6 +42,6 @@ public class SearchServiceImpl implements SearchService {
 
     public static void main(String... args) {
         SearchServiceImpl searchService = new SearchServiceImpl();
-        System.out.println(searchService.searchWeb("fabric.js how to draw a ploygon"));
+        System.out.println(searchService.searchWeb("textview"));
     }
 }
