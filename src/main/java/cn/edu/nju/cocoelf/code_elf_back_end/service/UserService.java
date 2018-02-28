@@ -1,6 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service;
 
-import cn.edu.nju.cocoelf.code_elf_back_end.config.param.ResultMessage;
+import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.UserModel;
 
 public interface UserService {
@@ -12,4 +12,6 @@ public interface UserService {
     UserModel getUserDetail(String username);
 
     UserModel modifyUser(UserModel userModel);
+
+    User verifyUsername(String username);
 }

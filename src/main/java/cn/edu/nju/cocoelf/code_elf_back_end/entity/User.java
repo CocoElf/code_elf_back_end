@@ -17,6 +17,20 @@ public class User {
     @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "user")
     private List<Memo> memoList;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<TimeRecord> timeRecordList;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private List<Search> searchList;
+
+    public List<TimeRecord> getTimeRecordList() {
+        return timeRecordList;
+    }
+
+    public void setTimeRecordList(List<TimeRecord> timeRecordList) {
+        this.timeRecordList = timeRecordList;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -44,6 +58,6 @@ public class User {
     @Override
     public String toString() {
         return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", memoList=" + memoList
-                + '}';
+                + ", timeRecordList=" + timeRecordList + '}';
     }
 }

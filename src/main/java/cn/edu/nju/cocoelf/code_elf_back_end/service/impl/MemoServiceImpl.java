@@ -1,12 +1,11 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.Memo;
-import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.MemoRepository;
-import cn.edu.nju.cocoelf.code_elf_back_end.repository.UserRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,14 +24,14 @@ public class MemoServiceImpl implements MemoService {
     private MemoRepository memoRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Override
     public List<MemoModel> getMemoList(String username, Integer pageNum, Integer pageSize) {
         Pageable pageable = new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "`date`");
         Page<Memo> page = memoRepository.findByUser_Username(username, pageable);
         List<MemoModel> memoModelList = new ArrayList<>();
-        for (Memo memo: page.getContent()) {
+        for (Memo memo : page.getContent()) {
             memoModelList.add(toModel(memo));
         }
         return memoModelList;
@@ -53,10 +52,7 @@ public class MemoServiceImpl implements MemoService {
     @Override
     public MemoModel addMemo(MemoModel memoModel, String username) {
         Memo memo = toEntity(memoModel);
-        User user = userRepository.findOne(username);
-        if (user == null || user.getUsername() == null) {
-            throw new InvalidRequestException("没有权限");
-        }
+        userService.verifyUsername(username);
         memo = memoRepository.saveAndFlush(memo);
 
         return toModel(memo);
@@ -65,10 +61,7 @@ public class MemoServiceImpl implements MemoService {
     @Override
     public Boolean deleteMemo(MemoModel memoModel, String username) {
         Memo memo = toEntity(memoModel);
-        User user = userRepository.findOne(username);
-        if (user == null || user.getUsername() == null) {
-            throw new InvalidRequestException("没有权限");
-        }
+        userService.verifyUsername(username);
         memoRepository.delete(memo);
         return true;
     }

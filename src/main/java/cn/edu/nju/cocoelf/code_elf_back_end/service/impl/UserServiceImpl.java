@@ -1,6 +1,7 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
+import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.ResourceConflictException;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.ResourceNotFoundException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.UserModel;
@@ -42,6 +43,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserModel modifyUser(UserModel userModel) {
         return toModel(userRepository.saveAndFlush(toEntity(userModel)));
+    }
+
+    @Override
+    public User verifyUsername(String username) {
+        User user = userRepository.findOne(username);
+        if (user == null || user.getUsername() == null) {
+            throw new InvalidRequestException("没有权限");
+        }
+        return user;
     }
 
     private UserModel toModel(User user) {
