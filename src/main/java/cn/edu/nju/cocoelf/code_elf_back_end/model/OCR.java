@@ -11,4 +11,10 @@ public class OCR {
 
     public OCR() {
     }
+
+    @Override
+    public String toString() {
+        return "OCR{" + "isAngleDetected=" + isAngleDetected + ", textAngle=" + textAngle + ", orientation='" +
+                orientation + '\'' + ", language='" + language + '\'' + ", regions=" + regions + '}';
+    }
 }

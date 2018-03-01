@@ -9,4 +9,9 @@ public class Line {
 
     public Line() {
     }
+
+    @Override
+    public String toString() {
+        return "Line{" + "isVertical=" + isVertical + ", words=" + words + ", boundingBox='" + boundingBox + '\'' + '}';
+    }
 }

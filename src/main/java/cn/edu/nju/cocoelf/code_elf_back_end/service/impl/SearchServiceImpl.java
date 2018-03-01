@@ -3,6 +3,7 @@ package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.Search;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.SearchRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
@@ -36,6 +37,11 @@ public class SearchServiceImpl implements SearchService {
         //TODO merge
 
         return webList;
+    }
+
+    @Override
+    public String imgToWord(OCR ocr, String username) {
+        return null;
     }
 
     private void recordSearch(String keyWord, String username) {

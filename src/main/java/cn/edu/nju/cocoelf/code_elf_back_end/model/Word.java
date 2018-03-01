@@ -6,4 +6,9 @@ public class Word {
 
     public Word() {
     }
+
+    @Override
+    public String toString() {
+        return "Word{" + "boundingBox='" + boundingBox + '\'' + ", text='" + text + '\'' + '}';
+    }
 }

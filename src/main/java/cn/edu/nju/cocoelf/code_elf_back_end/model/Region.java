@@ -10,4 +10,8 @@ public class Region {
     public Region() {
     }
 
+    @Override
+    public String toString() {
+        return "Region{" + "boundingBox='" + boundingBox + '\'' + ", lines=" + lines + '}';
+    }
 }
