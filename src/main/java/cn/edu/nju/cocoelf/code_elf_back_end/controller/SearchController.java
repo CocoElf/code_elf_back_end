@@ -3,11 +3,11 @@ package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
-import com.google.gson.Gson;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,17 +32,16 @@ public class SearchController {
     @ApiOperation(value = "将图片转换成文字")
     @ApiImplicitParams({@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
             @ApiImplicitParam(name = "ocr", value = "查询的图片转成的ocr", required = true, dataType = "String"),})
-    @PostMapping("/imgToWord")
-    public String imgToWord(OCR ocr, String username) {
-        Gson gson = new Gson();
-        OCR r = gson.fromJson(TestParam.testStr, OCR.class);
-        System.out.println(r);
-
-        return null;
+    @PostMapping("/imgToWord/{username}")
+    public String imgToWord(OCR ocr, @PathVariable String username) {
+//        Gson gson = new Gson();
+//        ocr = gson.fromJson(TestParam.testStr, OCR.class);
+//        System.out.println(ocr);
+        return searchService.imgToWord(ocr, username);
     }
 
-    public static void main(String ...args) {
-        new SearchController().imgToWord(null, null);
+    public static void main(String... args) {
+        System.out.println(new SearchController().imgToWord(null, null));
     }
 
 }

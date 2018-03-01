@@ -9,6 +9,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.repository.SearchRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.LanguageService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.component.OCRFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SearchFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.SearchUtil;
 import com.alibaba.fastjson.JSON;
@@ -33,6 +34,9 @@ public class SearchServiceImpl implements SearchService {
     @Autowired
     LanguageService languageService;
 
+    @Autowired
+    OCRFilter ocrFilter;
+
     @Override
     public List<QueryResultModel> queryWithWord(String keyWord, String username) {
         // record
@@ -50,25 +54,41 @@ public class SearchServiceImpl implements SearchService {
             languageName = "python";
             versionString = getNum(keyWord);
             apiKeyWord = keyWord.replaceAll(languageName, "").replaceAll(versionString, "");
-            try{
+            try {
                 version = Double.parseDouble(versionString);
             } catch (Exception e) {
                 apiSearch = false;
             }
         }
-//        List<QueryResultModel> apiList = languageService.searchAPIByKeyword(languageName, version, apiKeyWord, 5);
+        List<? extends QueryResultModel> apiList = new ArrayList<>();
+        if (apiSearch) {
+            apiList = languageService.searchAPIByKeyword(languageName, version,
+                    apiKeyWord, 5);
+        }
+
 
         // search web
-        List<QueryResultModel> webList = searchWeb(keyWord);
+        List<? extends QueryResultModel> webList = searchWeb(keyWord);
 
-        //TODO merge
-
-        return webList;
+        // merge
+        return merge(apiList, webList);
     }
 
     @Override
     public String imgToWord(OCR ocr, String username) {
-        return null;
+        System.out.println(ocr);
+        System.out.println();
+        userService.verifyUsername(username);
+        return ocrFilter.translate(ocr);
+    }
+
+    private List<QueryResultModel> merge(List<? extends QueryResultModel> a, List<? extends
+            QueryResultModel> b) {
+        List<QueryResultModel> res = new ArrayList<>();
+        res.addAll(a);
+        res.addAll(b);
+        return res;
+
     }
 
     private void recordSearch(String keyWord, String username) {
@@ -76,7 +96,7 @@ public class SearchServiceImpl implements SearchService {
         Search search = new Search();
         search.setKeyword(keyWord);
         search.setSearchDate(new Date());
-//        search.setUser(user);
+        search.setUser(user);
     }
 
     private List<QueryResultModel> searchWeb(String keyWord) {
