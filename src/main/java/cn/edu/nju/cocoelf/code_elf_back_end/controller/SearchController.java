@@ -2,6 +2,7 @@ package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -33,11 +34,11 @@ public class SearchController {
     @ApiImplicitParams({@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
             @ApiImplicitParam(name = "ocr", value = "查询的图片转成的ocr", required = true, dataType = "String"),})
     @PostMapping("/imgToWord/{username}")
-    public String imgToWord(OCR ocr, @PathVariable String username) {
+    public SearchModel imgToWord(OCR ocr, @PathVariable String username) {
 //        Gson gson = new Gson();
 //        ocr = gson.fromJson(TestParam.testStr, OCR.class);
 //        System.out.println(ocr);
-        return searchService.imgToWord(ocr, username);
+        return new SearchModel(searchService.imgToWord(ocr, username));
     }
 
     public static void main(String... args) {
