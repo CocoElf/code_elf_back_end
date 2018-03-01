@@ -24,7 +24,7 @@ public class OCRFilter {
             for (Line line : region.lines) {
                 String lineString = "";
                 for (Word word : line.words) {
-                    lineString += word.text;
+                    lineString += word.text + " ";
                 }
                 System.out.println("lineString: " + lineString);
                 result.add(lineString);

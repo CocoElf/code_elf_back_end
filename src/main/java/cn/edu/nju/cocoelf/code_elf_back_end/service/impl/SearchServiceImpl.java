@@ -77,7 +77,6 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public String imgToWord(OCR ocr, String username) {
         System.out.println(ocr);
-        System.out.println();
         userService.verifyUsername(username);
         return ocrFilter.translate(ocr);
     }
