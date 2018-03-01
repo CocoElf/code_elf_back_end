@@ -23,6 +23,14 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Search> searchList;
 
+    public List<Search> getSearchList() {
+        return searchList;
+    }
+
+    public void setSearchList(List<Search> searchList) {
+        this.searchList = searchList;
+    }
+
     public List<TimeRecord> getTimeRecordList() {
         return timeRecordList;
     }
@@ -58,6 +66,6 @@ public class User {
     @Override
     public String toString() {
         return "User{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", memoList=" + memoList
-                + ", timeRecordList=" + timeRecordList + '}';
+                + ", timeRecordList=" + timeRecordList + ", searchList=" + searchList + '}';
     }
 }

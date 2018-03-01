@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.util.Date;
 
+@Entity
 public class Search {
 
     @Id
