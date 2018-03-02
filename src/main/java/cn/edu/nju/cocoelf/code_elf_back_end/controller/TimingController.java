@@ -1,6 +1,7 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.config.param.CodeType;
+import cn.edu.nju.cocoelf.code_elf_back_end.config.param.TimingType;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.StatisticModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.TipModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.TimingService;
@@ -22,7 +23,7 @@ public class TimingController {
     TimingService timingService;
 
     @ApiOperation(value = "根据编程类型和编程时间获得提示", notes = "编程时间的单位是毫秒")
-    @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "codeType"),
+    @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "CodeType"),
             @ApiImplicitParam(name = "codeTime", value = "编程时间", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/tips")
@@ -30,16 +31,16 @@ public class TimingController {
         return timingService.getTips(codeType, codeTime, username);
     }
 
-    @ApiOperation(value = "开始计时")
-    @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "codeType"),
+    @ApiOperation(value = "开始某一类型的编程计时")
+    @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "CodeType"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/startTiming")
     public void startTiming(CodeType codeType, String username) {
         timingService.startTiming(codeType, username);
     }
 
-    @ApiOperation(value = "停止计时", notes = "返回编程时间")
-    @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "codeType"),
+    @ApiOperation(value = "停止某一类型的编程计时", notes = "返回编程时间")
+    @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "CodeType"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/endTiming")
     public Long endTiming(CodeType codeType, String username) {
@@ -53,5 +54,49 @@ public class TimingController {
     @PostMapping("/statistic")
     public StatisticModel getStatistic(Date fromDate, Date toDate, String username) {
         return timingService.getStatistic(fromDate, toDate, username);
+    }
+
+    @ApiOperation(value = "开始计时(打开APP时调用)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
+            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
+    })
+    @PostMapping("/startAppTiming")
+    public void startAppTiming(TimingType timingType, Date date, String username) {
+
+    }
+
+    @ApiOperation(value = "结束及时(关闭APP时调用)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
+            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
+    })
+    @PostMapping("/endAppTiming")
+    public void endAppTiming(TimingType timingType, Date date, String username) {
+
+    }
+
+    @ApiOperation(value = "暂停计时")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
+            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
+    })
+    @PostMapping("/pause")
+    public void pause(TimingType timingType, Date date, String username) {
+
+    }
+
+    @ApiOperation(value = "结束暂停")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
+            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
+    })
+    @PostMapping("/endPause")
+    public void endPause(TimingType timingType, Date date, String username) {
+
     }
 }

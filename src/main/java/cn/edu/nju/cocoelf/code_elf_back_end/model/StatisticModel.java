@@ -1,6 +1,7 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.model;
 
 import java.util.Date;
+import java.util.Map;
 
 public class StatisticModel {
 
@@ -29,6 +30,16 @@ public class StatisticModel {
      * 搜索次数
      */
     private Integer searchTimes;
+
+    private Map<Date, Date> timingMap;
+
+    public Map<Date, Date> getTimingMap() {
+        return timingMap;
+    }
+
+    public void setTimingMap(Map<Date, Date> timingMap) {
+        this.timingMap = timingMap;
+    }
 
     public String getUsername() {
         return username;
@@ -90,6 +101,6 @@ public class StatisticModel {
     public String toString() {
         return "StatisticModel{" + "username='" + username + '\'' + ", fromDate=" + fromDate + ", toDate=" + toDate +
                 ", codeTime=" + codeTime + ", debugTime=" + debugTime + ", testTime=" + testTime + ", searchTimes=" +
-                searchTimes + '}';
+                searchTimes + ", timingMap=" + timingMap + '}';
     }
 }
