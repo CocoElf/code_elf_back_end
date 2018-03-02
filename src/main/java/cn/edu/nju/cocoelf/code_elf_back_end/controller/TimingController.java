@@ -1,7 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.config.param.CodeType;
-import cn.edu.nju.cocoelf.code_elf_back_end.config.param.TimingType;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.StatisticModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.TipModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.TimingService;
@@ -9,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,8 +63,9 @@ public class TimingController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
     })
     @PostMapping("/startAppTiming")
-    public void startAppTiming(TimingType timingType, Date date, String username) {
-
+    public void startAppTiming(String  timingType,String date,  String username) {
+        //例如：START,1520012214036
+        System.out.println(timingType+","+date);
     }
 
     @ApiOperation(value = "结束及时(关闭APP时调用)")
@@ -74,8 +75,9 @@ public class TimingController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
     })
     @PostMapping("/endAppTiming")
-    public void endAppTiming(TimingType timingType, Date date, String username) {
-
+    public void endAppTiming(String  timingType,String date, String username) {
+        //例如：END,1520012364999
+        System.out.println(timingType+","+date);
     }
 
     @ApiOperation(value = "暂停计时")
@@ -85,8 +87,9 @@ public class TimingController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
     })
     @PostMapping("/pause")
-    public void pause(TimingType timingType, Date date, String username) {
-
+    public void pause(String  timingType,String date,  String username) {
+        //例如：PAUSE_START,1520012236718
+        System.out.println(timingType+","+date);
     }
 
     @ApiOperation(value = "结束暂停")
@@ -96,7 +99,8 @@ public class TimingController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
     })
     @PostMapping("/endPause")
-    public void endPause(TimingType timingType, Date date, String username) {
-
+    public void endPause(String  timingType,String date, String username) {
+        //例如：PAUSE_END,1520012364331
+        System.out.println(timingType+","+date);
     }
 }
