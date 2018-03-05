@@ -86,8 +86,6 @@
             <artifactId>vision</artifactId>
             <version>1.0.394</version>
         </dependency>
-
-
         <!--java crawler service-->
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -104,6 +102,24 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+
+        <!--中文语言处理-->
+        <dependency>
+            <groupId>org.nlpcn</groupId>
+            <artifactId>nlp-lang</artifactId>
+            <version>1.7.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>5.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.encog</groupId>
+            <artifactId>encog-core</artifactId>
+            <version>3.4</version>
         </dependency>
 
 	</dependencies>
