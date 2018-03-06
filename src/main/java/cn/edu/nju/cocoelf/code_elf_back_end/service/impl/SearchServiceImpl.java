@@ -11,8 +11,12 @@ import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.OCRFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SearchFilter;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.component.KNNModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.SearchUtil;
 import com.alibaba.fastjson.JSON;
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.DicAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchServiceImpl implements SearchService {
@@ -42,6 +47,8 @@ public class SearchServiceImpl implements SearchService {
         // record
         recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
+
+        int type = classify(keyWord);
 
         // search api
         String languageName = "";
@@ -146,5 +153,23 @@ public class SearchServiceImpl implements SearchService {
     public static void main(String... args) {
         SearchServiceImpl searchService = new SearchServiceImpl();
         System.out.println(searchService.searchWeb("textview"));
+    }
+
+
+    /**
+     * 将用户输入的语句进行分类
+     * @param sen
+     * @return
+     */
+    public int classify(String sen){
+        List<Term> termList = DicAnalysis.parse(sen).getTerms();
+        List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t->!t.equals("null")).collect(Collectors.toList());
+        SenTerm senTerm = new SenTerm();
+        senTerm.tokens = new String[tagList.size()];
+        for(int i = 0 ; i < senTerm.tokens.length ; i++){
+            senTerm.tokens[i] = tagList.get(i);
+        }
+        KNNModel knnModel = new KNNModel("library/dictionary.txt",3);
+        return  knnModel.getType(senTerm);
     }
 }
