@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EntityScan("com.patterncat.domain")
+@EntityScan("com.edu.nju.cocoelf.code_elf_back_end.repository.domain")
 @EnableJpaRepositories(basePackages = "cn.edu.nju.cocoelf.code_elf_back_end.repository",entityManagerFactoryRef = "pgEntityManagerFactory",
         transactionManagerRef = "pgTransactionManager")
 public class RespositoriesSecondaryConfig {
