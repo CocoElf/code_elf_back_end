@@ -14,3 +14,16 @@ string	class	3
 str	class	3
 int	class	3
 function	class	3
+int	in	3
+dict	in	3
+help	in	3
+min	in	3
+all	in	3
+dir	in	3
+hex	in	3
+next	in	3
+setattr	in	3
+open	in	3
+sum	in	3
+len	in	3
+input	in	3

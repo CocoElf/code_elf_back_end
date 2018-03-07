@@ -1,6 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.dao;
 
-import cn.edu.nju.cocoelf.code_elf_back_end.entity.FunctionAPI;
+import cn.edu.nju.cocoelf.code_elf_back_end.entity.StubApi;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.PythonAPIDao;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import org.junit.Test;
@@ -30,9 +30,9 @@ public class PythonAPIDaoTest {
         List<String> list = new ArrayList<>();
         list.add("返回");
         list.add("目录");
-        List<FunctionAPI> functionAPIS = pythonAPIDao.searchResult("os",list);
-        System.out.println(functionAPIS.size());
-        functionAPIS.forEach(t->LogUtil.log(t.getPrint()));
+        List<StubApi> stubApis = pythonAPIDao.searchResult("os",list);
+        System.out.println(stubApis.size());
+        stubApis.forEach(t->LogUtil.log(t.getPrint()));
 
     }
 }

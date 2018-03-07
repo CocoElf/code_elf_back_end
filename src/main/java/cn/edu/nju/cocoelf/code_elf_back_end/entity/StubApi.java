@@ -1,6 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.entity;
 
-public class FunctionAPI {
+public class StubApi {
     private String package_Name;
 
     private String class_Name;
@@ -12,6 +12,10 @@ public class FunctionAPI {
     private String description;
 
     private String chinese;
+
+    private String page;
+
+    private String position;
 
     public String getPackage_Name() {
         return package_Name;
@@ -59,6 +63,23 @@ public class FunctionAPI {
 
     public void setChinese(String chinese) {
         this.chinese = chinese;
+    }
+
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getPrint(){

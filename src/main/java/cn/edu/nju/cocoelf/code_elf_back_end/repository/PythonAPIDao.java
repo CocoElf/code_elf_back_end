@@ -1,6 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.repository;
 
-import cn.edu.nju.cocoelf.code_elf_back_end.entity.FunctionAPI;
+import cn.edu.nju.cocoelf.code_elf_back_end.entity.StubApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -44,12 +44,12 @@ public class PythonAPIDao {
         return liststr.get(0);
     }
 
-    public List<FunctionAPI> searchResult(String classOrMethod, List<String> searchFunction){
+    public List<StubApi> searchResult(String classOrMethod, List<String> searchFunction){
         String like = "%";
         for (String str : searchFunction ) {
             like += str+"%";
         }
-        String sql = "select * from api WHERE (class_name=? or package_name=?) and chinese like ? ";
+        String sql = "select * from stub WHERE (class_name=? or package_name=?) and chinese like ? ";
         String finalLike = like;
         Object obj = jdbcTemplate.execute(sql, new PreparedStatementCallback() {
 
@@ -59,21 +59,23 @@ public class PythonAPIDao {
                 preparedStatement.setString(2,classOrMethod);
                 preparedStatement.setString(3, finalLike);
                 ResultSet rs= preparedStatement.executeQuery();
-                List<FunctionAPI> list  = new ArrayList<>();
+                List<StubApi> list  = new ArrayList<>();
                 while(rs.next()){
-                    FunctionAPI functionAPI= new FunctionAPI();
-                    functionAPI.setPackage_Name(rs.getString("package_name"));
-                    functionAPI.setClass_Name(rs.getString("class_name"));
-                    functionAPI.setName(rs.getString("name"));
-                    functionAPI.setChinese(rs.getString("chinese"));
-                    functionAPI.setType(rs.getString("type"));
-                    list.add(functionAPI);
+                    StubApi stubApi = new StubApi();
+                    stubApi.setPackage_Name(rs.getString("package_name"));
+                    stubApi.setClass_Name(rs.getString("class_name"));
+                    stubApi.setName(rs.getString("name"));
+                    stubApi.setChinese(rs.getString("chinese"));
+                    stubApi.setType(rs.getString("type"));
+                    stubApi.setPage(rs.getString("page"));
+                    stubApi.setPosition(rs.getString("position"));
+                    list.add(stubApi);
                 }
                 return list;
             }
         });
 
-        return (List<FunctionAPI>) obj;
+        return (List<StubApi>) obj;
 
     }
 }

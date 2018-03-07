@@ -5,6 +5,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
+import cn.edu.nju.cocoelf.code_elf_back_end.repository.PythonAPIDao;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.SearchRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.LanguageService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
@@ -40,6 +41,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     OCRFilter ocrFilter;
+
+    @Autowired
+    PythonAPIDao pythonAPIDao;
 
     @Override
     public List<QueryResultModel> queryWithWord(String keyWord, String username) {
@@ -143,12 +147,12 @@ public class SearchServiceImpl implements SearchService {
         String language = map.get("lan").get(0);
         String version = getNum(sen);
         String method  = map.get("class").get(0);
-        List<String> functions =  getFuntion(termList);
-        LogUtil.log("api 功能查询");
-        LogUtil.log("language: "+language);
-        LogUtil.log("version: "+version);
-        LogUtil.log("method: "+method);
-        LogUtil.log("function: "+functions.toString());
+        if(map.get("class").size()==0){
+            List<String> functions =  getFuntion(termList,true);
+            pythonAPIDao.searchResult("",functions);
+
+        }
+
         return null;
     }
 
@@ -230,14 +234,13 @@ public class SearchServiceImpl implements SearchService {
     private Map<String,List<String>> getComponent(List<Term> termList){
         Map<String,List<String>> map = new HashMap<>();;
         map.put("lan",new ArrayList<>());
-        map.put("framework",new ArrayList<>());
-        map.put("framework",new ArrayList<>());
+        map.put("in",new ArrayList<>());
         map.put("class",new ArrayList<>());
         for(Term term : termList){
             if(term.getNatureStr().equals("lan")){
                 map.get("lan").add(term.getName());
-            }else if (term.getNatureStr().equals("framework")){
-                map.get("framework").add(term.getName());
+            }else if (term.getNatureStr().equals("in")){
+                map.get("in").add(term.getName());
             }else if (term.getNatureStr().equals("class")){
                 map.get("class").add(term.getName());
             }
@@ -246,12 +249,10 @@ public class SearchServiceImpl implements SearchService {
         return map;
     }
 
-    private List<String> getFuntion(List<Term> termList){
+    private List<String> getFuntion(List<Term> termList, boolean builtIn){
         List<String> list = new ArrayList<>();
-        boolean begin = false;
+        boolean begin = builtIn;
         for(Term term : termList){
-//            LogUtil.log(term.getName());
-//            LogUtil.log(term.getNatureStr());
             if(!begin && !term.getNatureStr().equals("class")){
                 continue;
             }else if(begin){
