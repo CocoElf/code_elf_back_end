@@ -1,9 +1,12 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.model;
 
+import cn.edu.nju.cocoelf.code_elf_back_end.util.DateUtil;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SearchResultModel implements Serializable {
     private String name;
@@ -81,6 +84,21 @@ public class SearchResultModel implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "QueryResultModel{" + "name='" + name + '\'' + ", snippet='" + snippet + '\'' + ", url='" + url + '\''
+                + ", type='" + type + '\'' + ", date='" + DateUtil.getRawDate(date) + '\'' +
+                ", keywords=" + getListString(keywords) +
+                '}';
+    }
+
+
+    private String getListString(List<String> list){
+        if(list==null || list.size() == 0) return "[]";
+        List<String> ans  = list.stream().map(t->'\''+t+'\'').collect(Collectors.toList());
+        return ans.toString();
     }
 }
 

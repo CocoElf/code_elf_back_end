@@ -1,6 +1,7 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.Search;
+import cn.edu.nju.cocoelf.code_elf_back_end.entity.StubApi;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
@@ -72,36 +73,13 @@ public class SearchServiceImpl implements SearchService {
                 LogUtil.log("web search");
             }
         }
-//        // search api
-//        String languageName = "";
-//        String versionString = "";
-//        double version = 0.0;
-//        String apiKeyWord = "";
-//        boolean apiSearch = false;
-//        if (keyWord.contains("python")) {
-//            apiSearch = true;
-//            languageName = "python";
-//            versionString = getNum(keyWord);
-//            apiKeyWord = keyWord.replaceAll(languageName, "").replaceAll(versionString, "");
-//            try {
-//                version = Double.parseDouble(versionString);
-//            } catch (Exception e) {
-//                apiSearch = false;
-//            }
-//        }
-//        List<? extends SearchResultModel> apiList = new ArrayList<>();
-//        if (apiSearch) {
-//            apiList = languageService.searchAPIByKeyword(languageName, version,
-//                    apiKeyWord, 5);
-//        }
-
 
         // search web
-        List<? extends SearchResultModel> webList = searchWeb(keyWord);
+//        List<? extends SearchResultModel> webList = searchWeb(keyWord);
 
         // merge
         //TODO add api search
-        return merge(apiList, webList);
+        return merge(apiList, new ArrayList<>());
     }
 
 
@@ -135,27 +113,56 @@ public class SearchServiceImpl implements SearchService {
     private List<SearchResultModel> apiSearch(String sen, Map<String,List<String>> map){
         String language = map.get("lan").get(0);
         String version = getNum(sen);
-        String method  = map.get("class").get(0);
-        LogUtil.log("api 查询");
-        LogUtil.log("language: "+language);
-        LogUtil.log("version: "+version);
-        LogUtil.log("method: "+method);
-
-        return null;
+        String method =  map.get("class").size() == 0 ? map.get("in").get(0):map.get("class").get(0);
+        List<StubApi> stubApiList = pythonAPIDao.searchResult(method,new ArrayList<>());
+        List<String> keywords = new ArrayList<>();
+        keywords.addAll(map.get("lan"));
+        keywords.addAll(map.get("in"));
+        keywords.addAll(map.get("class"));
+        List<SearchResultModel> searchResultModelList  =
+                stubApiList.stream().map(t->{
+                    SearchResultModel s = new SearchResultModel();
+                    s.setDate(new Date());
+                    s.setKeywords(keywords);
+                    s.setType(t.getType());
+                    s.setSnippet("api查询");
+                    s.setUrl(t.getPage()+t.getPosition());
+                    s.setName(t.getPrint());
+                    return s;
+                }).collect(Collectors.toList());
+        return searchResultModelList;
     }
 
     //TODO wait to add sqlite source
     private List<SearchResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
-        String language = map.get("lan").get(0);
-        String version = getNum(sen);
-        String method  = map.get("class").get(0);
+//        String language = map.get("lan").get(0);
+//        String version = getNum(sen);
+//        String method  = map.get("class").get(0);
+        List<StubApi> stubApiList;
         if(map.get("class").size()==0){
             List<String> functions =  getFuntion(termList,true);
-            pythonAPIDao.searchResult("",functions);
-
+            stubApiList= pythonAPIDao.searchResult("",functions);
+        }else{
+            List<String> functions =  getFuntion(termList,false);
+            stubApiList= pythonAPIDao.searchResult(map.get("class").get(0),functions);
         }
+        List<String> keywords = new ArrayList<>();
+        keywords.addAll(map.get("lan"));
+        keywords.addAll(map.get("in"));
+        keywords.addAll(map.get("class"));
+        List<SearchResultModel> searchResultModelList  =
+                stubApiList.stream().map(t->{
+                    SearchResultModel s = new SearchResultModel();
+                    s.setDate(new Date());
+                    s.setKeywords(keywords);
+                    s.setType(t.getType());
+                    s.setSnippet("根据功能查找函数");
+                    s.setUrl(t.getPage()+t.getPosition());
+                    s.setName(t.getPrint());
+                    return s;
+                }).collect(Collectors.toList());
 
-        return null;
+        return searchResultModelList;
     }
 
 

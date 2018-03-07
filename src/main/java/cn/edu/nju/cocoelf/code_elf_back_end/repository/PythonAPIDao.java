@@ -49,7 +49,7 @@ public class PythonAPIDao {
         for (String str : searchFunction ) {
             like += str+"%";
         }
-        String sql = "select * from stub WHERE (class_name=? or package_name=?) and chinese like ? ";
+        String sql = "select * from stub WHERE (class_name=? or package_name=? or NAME = ?) and chinese like ? ";
         String finalLike = like;
         Object obj = jdbcTemplate.execute(sql, new PreparedStatementCallback() {
 
@@ -57,7 +57,8 @@ public class PythonAPIDao {
             public Object doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException, DataAccessException {
                 preparedStatement.setString(1,classOrMethod);
                 preparedStatement.setString(2,classOrMethod);
-                preparedStatement.setString(3, finalLike);
+                preparedStatement.setString(3,classOrMethod);
+                preparedStatement.setString(4, finalLike);
                 ResultSet rs= preparedStatement.executeQuery();
                 List<StubApi> list  = new ArrayList<>();
                 while(rs.next()){
@@ -68,7 +69,12 @@ public class PythonAPIDao {
                     stubApi.setChinese(rs.getString("chinese"));
                     stubApi.setType(rs.getString("type"));
                     stubApi.setPage(rs.getString("page"));
-                    stubApi.setPosition(rs.getString("position"));
+                    String pos = rs.getString("position");
+                    int ind = pos.indexOf('(');
+                    if(ind > 0){
+                        pos = pos.substring(0,ind);
+                    }
+                    stubApi.setPosition(pos);
                     list.add(stubApi);
                 }
                 return list;

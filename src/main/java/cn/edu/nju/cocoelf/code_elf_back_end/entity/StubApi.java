@@ -87,7 +87,6 @@ public class StubApi {
         if(package_Name!=null && !"".equals(package_Name))  show+=package_Name+".";
         if(class_Name!=null && !"".equals(class_Name))  show+=class_Name+".";
         show+=name;
-        show+=" ["+type+"]";
         return show;
     }
 }
