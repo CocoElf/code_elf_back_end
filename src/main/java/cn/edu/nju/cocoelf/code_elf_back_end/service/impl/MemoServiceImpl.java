@@ -73,7 +73,7 @@ public class MemoServiceImpl implements MemoService {
         }
         MemoModel memoModel = new MemoModel();
         memoModel.setDate(memo.getDate());
-        memoModel.setKeyWord(memo.getKeyWord());
+//        memoModel.setKeywords(memo.getKeyWord());
         memoModel.setMemoId(memo.getMemoId());
         memoModel.setSnippet(memo.getSnippet());
         return memoModel;
@@ -96,9 +96,9 @@ public class MemoServiceImpl implements MemoService {
         if (memoModel.getDate() != null) {
             memo.setDate(memoModel.getDate());
         }
-        if (memoModel.getKeyWord() != null) {
-            memo.setKeyWord(memoModel.getKeyWord());
-        }
+//        if (memoModel.getKeyWord() != null) {
+//            memo.setKeyWord(memoModel.getKeyWord());
+//        }
         if (memoModel.getName() != null) {
             memo.setSnippet(memoModel.getName());
         }

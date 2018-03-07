@@ -2,6 +2,7 @@ package cn.edu.nju.cocoelf.code_elf_back_end.Service.impl;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.controller.TestParam;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.impl.SearchServiceImpl;
@@ -45,5 +46,21 @@ public class SearchServiceImplTest {
         LogUtil.log(SenTerm.mapToString[re]);
     }
 //        System.out.
+
+    @Test
+    public void queryWord() throws Exception {
+        String word = "如何在python中求数组长度";
+        List<SearchResultModel> list = searchService.searchWithWord(word,"");
+        list.forEach(t-> System.out.println(t));
+//        LogUtil.log(SenTerm.mapToString[re]);
+    }
+
+    @Test
+    public void queryWord2() throws Exception {
+        String word = "python中的str模块";
+        List<SearchResultModel> list = searchService.searchWithWord(word,"");
+        list.forEach(t-> System.out.println(t));
+//        LogUtil.log(SenTerm.mapToString[re]);
+    }
 
 }

@@ -51,7 +51,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public List<SearchResultModel> searchWithWord(String keyWord, String username) {
         // record
-        recordSearch(keyWord, username);
+//        recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
 
         List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
@@ -78,7 +78,7 @@ public class SearchServiceImpl implements SearchService {
 //        List<? extends SearchResultModel> webList = searchWeb(keyWord);
 
         // merge
-        //TODO add api search
+        //TODO add web search
         return merge(apiList, new ArrayList<>());
     }
 
