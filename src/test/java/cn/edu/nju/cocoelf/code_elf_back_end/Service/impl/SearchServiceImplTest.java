@@ -34,10 +34,10 @@ public class SearchServiceImplTest {
 
     @Test
     public void classify() throws Exception {
-        String word = "c++的字符串";
-        int re = searchServiceImpl.classify(word);
-        System.out.println(SenTerm.mapToString[re]);
-        LogUtil.log(SenTerm.mapToString[re]);
+//        String word = "c++的字符串";
+//        int re = searchServiceImpl.classify(word);
+//        System.out.println(SenTerm.mapToString[re]);
+//        LogUtil.log(SenTerm.mapToString[re]);
     }
 //        System.out.
 

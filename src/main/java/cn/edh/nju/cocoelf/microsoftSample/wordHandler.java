@@ -1,42 +1,48 @@
-//package cn.edh.nju.cocoelf.microsoftSample;
-//
-//
-//import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
-//import org.ansj.domain.Result;
-//import org.ansj.domain.Term;
-//import org.ansj.library.DicLibrary;
-//import org.ansj.recognition.Recognition;
-//import org.ansj.recognition.impl.NatureRecognition;
-//import org.ansj.splitWord.analysis.DicAnalysis;
-//import org.ansj.splitWord.analysis.NlpAnalysis;
-//import org.ansj.splitWord.analysis.ToAnalysis;
-//import org.nlpcn.commons.lang.tire.domain.Forest;
-//import org.nlpcn.commons.lang.tire.library.Library;
-//
-//import java.io.BufferedReader;
-//import java.io.InputStreamReader;
-//import java.lang.reflect.Array;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.List;
-//import java.util.stream.Collectors;
-//
-//public class wordHandler {
-//    public static void main(String[] args) throws Exception {
-//       DicAnalysis.parse("");
-//       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-//       while (true){
-//           System.out.println("用户搜索：");
-//           String sen = br.readLine();
-//
-//           if(sen.equals("quit")){
-//               break;
-//           }
-////           String result = analyze2(sen);
-////           System.out.println(result);
-//       }
-//
-//    }
+package cn.edh.nju.cocoelf.microsoftSample;
+
+
+import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
+import org.ansj.domain.Result;
+import org.ansj.domain.Term;
+import org.ansj.library.DicLibrary;
+import org.ansj.recognition.Recognition;
+import org.ansj.recognition.impl.NatureRecognition;
+import org.ansj.splitWord.analysis.DicAnalysis;
+import org.ansj.splitWord.analysis.NlpAnalysis;
+import org.ansj.splitWord.analysis.ToAnalysis;
+import org.nlpcn.commons.lang.tire.domain.Forest;
+import org.nlpcn.commons.lang.tire.library.Library;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class wordHandler {
+    public static void main(String[] args) throws Exception {
+       DicAnalysis.parse("");
+       BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+       while (true){
+           System.out.println("用户搜索：");
+
+           String sen = br.readLine();
+
+           if(sen.equals("quit")){
+               break;
+           }
+
+           System.out.println(DicAnalysis.parse(sen).getTerms());
+
+
+//           String result = analyze2(sen);
+//           System.out.println(result);
+       }
+
+    }
+}
 //
 //    public static String analyze(String sen){
 //        String language = "";

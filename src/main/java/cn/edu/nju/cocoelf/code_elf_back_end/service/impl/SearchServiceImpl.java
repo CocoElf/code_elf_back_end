@@ -13,6 +13,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.service.component.OCRFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SearchFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.KNNModel;
+import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.SearchUtil;
 import com.alibaba.fastjson.JSON;
 import org.ansj.domain.Term;
@@ -20,9 +21,7 @@ import org.ansj.splitWord.analysis.DicAnalysis;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -48,37 +47,55 @@ public class SearchServiceImpl implements SearchService {
         recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
 
-        int type = classify(keyWord);
+        List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
+        int type = classify(termList);
+        Map<String,List<String>> comp = getComponent(termList);
 
-        // search api
-        String languageName = "";
-        String versionString = "";
-        double version = 0.0;
-        String apiKeyWord = "";
-        boolean apiSearch = false;
-        if (keyWord.contains("python")) {
-            apiSearch = true;
-            languageName = "python";
-            versionString = getNum(keyWord);
-            apiKeyWord = keyWord.replaceAll(languageName, "").replaceAll(versionString, "");
-            try {
-                version = Double.parseDouble(versionString);
-            } catch (Exception e) {
-                apiSearch = false;
+
+        switch (type){
+            case 0:{
+                apiSearch(keyWord,comp);
+                break;
+            }
+            case 3:{
+                apiSearchBaseFuntion(keyWord,termList,comp);
+                break;
+            }
+
+            default:{
+                LogUtil.log("web search");
             }
         }
-        List<? extends QueryResultModel> apiList = new ArrayList<>();
-        if (apiSearch) {
-            apiList = languageService.searchAPIByKeyword(languageName, version,
-                    apiKeyWord, 5);
-        }
+//        // search api
+//        String languageName = "";
+//        String versionString = "";
+//        double version = 0.0;
+//        String apiKeyWord = "";
+//        boolean apiSearch = false;
+//        if (keyWord.contains("python")) {
+//            apiSearch = true;
+//            languageName = "python";
+//            versionString = getNum(keyWord);
+//            apiKeyWord = keyWord.replaceAll(languageName, "").replaceAll(versionString, "");
+//            try {
+//                version = Double.parseDouble(versionString);
+//            } catch (Exception e) {
+//                apiSearch = false;
+//            }
+//        }
+//        List<? extends QueryResultModel> apiList = new ArrayList<>();
+//        if (apiSearch) {
+//            apiList = languageService.searchAPIByKeyword(languageName, version,
+//                    apiKeyWord, 5);
+//        }
 
 
         // search web
         List<? extends QueryResultModel> webList = searchWeb(keyWord);
 
         // merge
-        return merge(apiList, webList);
+        //TODO add api search
+        return merge(new ArrayList<>(), webList);
     }
 
     @Override
@@ -104,6 +121,25 @@ public class SearchServiceImpl implements SearchService {
         search.setSearchDate(new Date());
         search.setUser(user);
     }
+
+
+    //TODO wait to add sqlite source
+    private List<QueryResultModel> apiSearch(String sen, Map<String,List<String>> map){
+        String language = map.get("lan").get(0);
+        String version = getNum(sen);
+        String method  = map.get("class").get(0);
+        return null;
+    }
+
+    private List<QueryResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
+        String language = map.get("lan").get(0);
+        String version = getNum(sen);
+        String method  = map.get("class").get(0);
+        List<String> functions =  getFuntion(termList);
+        return null;
+    }
+
+
 
     private List<QueryResultModel> searchWeb(String keyWord) {
         String akeyWord = SearchFilter.convertKeyWord(keyWord);
@@ -158,11 +194,9 @@ public class SearchServiceImpl implements SearchService {
 
     /**
      * 将用户输入的语句进行分类
-     * @param sen
      * @return
      */
-    public int classify(String sen){
-        List<Term> termList = DicAnalysis.parse(sen).getTerms();
+    private int classify( List<Term> termList){
         List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t->!t.equals("null")).collect(Collectors.toList());
         SenTerm senTerm = new SenTerm();
         senTerm.tokens = new String[tagList.size()];
@@ -171,5 +205,47 @@ public class SearchServiceImpl implements SearchService {
         }
         KNNModel knnModel = new KNNModel("library/dictionary.txt",3);
         return  knnModel.getType(senTerm);
+    }
+
+
+    /**
+     * 解析用户输入语句的关键信息
+     * @param termList
+     * @return
+     */
+    private Map<String,List<String>> getComponent(List<Term> termList){
+        Map<String,List<String>> map = new HashMap<>();;
+        map.put("lan",new ArrayList<>());
+        map.put("framework",new ArrayList<>());
+        map.put("framework",new ArrayList<>());
+        map.put("class",new ArrayList<>());
+        for(Term term : termList){
+            if(term.getNatureStr().equals("lan")){
+                map.get("lan").add(term.getName());
+            }else if (term.getNatureStr().equals("framework")){
+                map.get("framework").add(term.getName());
+            }else if (term.getNatureStr().equals("class")){
+                map.get("class").add(term.getName());
+            }
+        }
+
+        return map;
+    }
+
+    private List<String> getFuntion(List<Term> termList){
+        List<String> list = new ArrayList<>();
+        boolean begin = false;
+        for(Term term : termList){
+            if(!begin || !term.getNatureStr().equals("class")){
+                continue;
+            }else if(begin){
+                if(Arrays.asList("n","nv","v").contains(term.getNatureStr()))
+                    list.add(term.getName());
+            }else{
+                begin = true;
+            }
+        }
+
+        return list;
     }
 }
