@@ -51,14 +51,14 @@ public class SearchServiceImpl implements SearchService {
         int type = classify(termList);
         Map<String,List<String>> comp = getComponent(termList);
 
-
+        List<? extends QueryResultModel> apiList = new ArrayList<>();
         switch (type){
             case 0:{
-                apiSearch(keyWord,comp);
+                apiList = apiSearch(keyWord,comp);
                 break;
             }
             case 3:{
-                apiSearchBaseFuntion(keyWord,termList,comp);
+                apiList = apiSearchBaseFuntion(keyWord,termList,comp);
                 break;
             }
 
@@ -95,8 +95,9 @@ public class SearchServiceImpl implements SearchService {
 
         // merge
         //TODO add api search
-        return merge(new ArrayList<>(), webList);
+        return merge(apiList, webList);
     }
+
 
     @Override
     public String imgToWord(OCR ocr, String username) {
@@ -114,6 +115,7 @@ public class SearchServiceImpl implements SearchService {
 
     }
 
+
     private void recordSearch(String keyWord, String username) {
         User user = userService.verifyUsername(username);
         Search search = new Search();
@@ -128,14 +130,25 @@ public class SearchServiceImpl implements SearchService {
         String language = map.get("lan").get(0);
         String version = getNum(sen);
         String method  = map.get("class").get(0);
+        LogUtil.log("api 查询");
+        LogUtil.log("language: "+language);
+        LogUtil.log("version: "+version);
+        LogUtil.log("method: "+method);
+
         return null;
     }
 
+    //TODO wait to add sqlite source
     private List<QueryResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
         String language = map.get("lan").get(0);
         String version = getNum(sen);
         String method  = map.get("class").get(0);
         List<String> functions =  getFuntion(termList);
+        LogUtil.log("api 功能查询");
+        LogUtil.log("language: "+language);
+        LogUtil.log("version: "+version);
+        LogUtil.log("method: "+method);
+        LogUtil.log("function: "+functions.toString());
         return null;
     }
 
@@ -188,7 +201,8 @@ public class SearchServiceImpl implements SearchService {
 
     public static void main(String... args) {
         SearchServiceImpl searchService = new SearchServiceImpl();
-        System.out.println(searchService.searchWeb("textview"));
+        searchService.queryWithWord("C++11的字符串转化成数字的方法","");
+//        System.out.println(searchService.searchWeb("textview"));
     }
 
 
@@ -236,7 +250,9 @@ public class SearchServiceImpl implements SearchService {
         List<String> list = new ArrayList<>();
         boolean begin = false;
         for(Term term : termList){
-            if(!begin || !term.getNatureStr().equals("class")){
+//            LogUtil.log(term.getName());
+//            LogUtil.log(term.getNatureStr());
+            if(!begin && !term.getNatureStr().equals("class")){
                 continue;
             }else if(begin){
                 if(Arrays.asList("n","nv","v").contains(term.getNatureStr()))
