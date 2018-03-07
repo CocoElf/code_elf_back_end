@@ -1,6 +1,7 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.component;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,21 +21,21 @@ public class SearchFilter {
         return res;
     }
 
-    public static List<QueryResultModel> sortAndCutResult(List<QueryResultModel> queryResultModelList) {
-        List<QueryResultModel> firstList = new ArrayList<>();
-        List<QueryResultModel> secondList = new ArrayList<>();
-        List<QueryResultModel> thirdList = new ArrayList<>();
+    public static List<SearchResultModel> sortAndCutResult(List<SearchResultModel> searchResultModelList) {
+        List<SearchResultModel> firstList = new ArrayList<>();
+        List<SearchResultModel> secondList = new ArrayList<>();
+        List<SearchResultModel> thirdList = new ArrayList<>();
 
-        for (QueryResultModel queryResultModel: queryResultModelList) {
-            if (!queryResultModel.getUrl().contains("www.stackoverflow.com")) {
-                if (queryResultModel.getUrl().contains("www.csdn.net")) {
-                    secondList.add(queryResultModel);
+        for (SearchResultModel searchResultModel: searchResultModelList) {
+            if (!searchResultModel.getUrl().contains("www.stackoverflow.com")) {
+                if (searchResultModel.getUrl().contains("www.csdn.net")) {
+                    secondList.add(searchResultModel);
                 } else {
-                    thirdList.add(queryResultModel);
+                    thirdList.add(searchResultModel);
                 }
                 continue;
             }
-            firstList.add(queryResultModel);
+            firstList.add(searchResultModel);
         }
 
         firstList.addAll(secondList);

@@ -4,7 +4,8 @@ import cn.edu.nju.cocoelf.code_elf_back_end.entity.Search;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
-import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
+import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.SearchRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.LanguageService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
@@ -42,7 +43,7 @@ public class SearchServiceImpl implements SearchService {
     OCRFilter ocrFilter;
 
     @Override
-    public List<QueryResultModel> queryWithWord(String keyWord, String username) {
+    public List<SearchResultModel> searchWithWord(String keyWord, String username) {
         // record
         recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
@@ -51,7 +52,7 @@ public class SearchServiceImpl implements SearchService {
         int type = classify(termList);
         Map<String,List<String>> comp = getComponent(termList);
 
-        List<? extends QueryResultModel> apiList = new ArrayList<>();
+        List<? extends SearchResultModel> apiList = new ArrayList<>();
         switch (type){
             case 0:{
                 apiList = apiSearch(keyWord,comp);
@@ -83,7 +84,7 @@ public class SearchServiceImpl implements SearchService {
 //                apiSearch = false;
 //            }
 //        }
-//        List<? extends QueryResultModel> apiList = new ArrayList<>();
+//        List<? extends SearchResultModel> apiList = new ArrayList<>();
 //        if (apiSearch) {
 //            apiList = languageService.searchAPIByKeyword(languageName, version,
 //                    apiKeyWord, 5);
@@ -91,7 +92,7 @@ public class SearchServiceImpl implements SearchService {
 
 
         // search web
-        List<? extends QueryResultModel> webList = searchWeb(keyWord);
+        List<? extends SearchResultModel> webList = searchWeb(keyWord);
 
         // merge
         //TODO add api search
@@ -106,9 +107,9 @@ public class SearchServiceImpl implements SearchService {
         return ocrFilter.translate(ocr);
     }
 
-    private List<QueryResultModel> merge(List<? extends QueryResultModel> a, List<? extends
-            QueryResultModel> b) {
-        List<QueryResultModel> res = new ArrayList<>();
+    private List<SearchResultModel> merge(List<? extends SearchResultModel> a, List<? extends
+            SearchResultModel> b) {
+        List<SearchResultModel> res = new ArrayList<>();
         res.addAll(a);
         res.addAll(b);
         return res;
@@ -126,7 +127,7 @@ public class SearchServiceImpl implements SearchService {
 
 
     //TODO wait to add sqlite source
-    private List<QueryResultModel> apiSearch(String sen, Map<String,List<String>> map){
+    private List<SearchResultModel> apiSearch(String sen, Map<String,List<String>> map){
         String language = map.get("lan").get(0);
         String version = getNum(sen);
         String method  = map.get("class").get(0);
@@ -139,7 +140,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     //TODO wait to add sqlite source
-    private List<QueryResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
+    private List<SearchResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
         String language = map.get("lan").get(0);
         String version = getNum(sen);
         String method  = map.get("class").get(0);
@@ -154,7 +155,7 @@ public class SearchServiceImpl implements SearchService {
 
 
 
-    private List<QueryResultModel> searchWeb(String keyWord) {
+    private List<SearchResultModel> searchWeb(String keyWord) {
         String akeyWord = SearchFilter.convertKeyWord(keyWord);
         String searchResult;
         try {
@@ -165,9 +166,9 @@ public class SearchServiceImpl implements SearchService {
         }
         System.out.println(searchResult);
 
-        List<QueryResultModel> queryResultModelList = JSON.parseArray(searchResult, QueryResultModel.class);
+        List<SearchResultModel> searchResultModelList = JSON.parseArray(searchResult, SearchResultModel.class);
 
-        return SearchFilter.sortAndCutResult(queryResultModelList);
+        return SearchFilter.sortAndCutResult(searchResultModelList);
     }
 
     private String getNum(String word) {
@@ -201,7 +202,7 @@ public class SearchServiceImpl implements SearchService {
 
     public static void main(String... args) {
         SearchServiceImpl searchService = new SearchServiceImpl();
-        searchService.queryWithWord("C++11的字符串转化成数字的方法","");
+        searchService.searchWithWord("C++11的字符串转化成数字的方法","");
 //        System.out.println(searchService.searchWeb("textview"));
     }
 
