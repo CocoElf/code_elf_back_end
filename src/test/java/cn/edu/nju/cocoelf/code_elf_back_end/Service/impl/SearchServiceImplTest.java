@@ -7,11 +7,15 @@ import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.impl.SearchServiceImpl;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import com.google.gson.Gson;
+import org.ansj.domain.Term;
+import org.ansj.splitWord.analysis.DicAnalysis;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,10 +38,11 @@ public class SearchServiceImplTest {
 
     @Test
     public void classify() throws Exception {
-//        String word = "c++的字符串";
-//        int re = searchServiceImpl.classify(word);
-//        System.out.println(SenTerm.mapToString[re]);
-//        LogUtil.log(SenTerm.mapToString[re]);
+        String word = "c++的字符串";
+        List<Term> termList = DicAnalysis.parse(word).getTerms();
+        int re = searchServiceImpl.classify(termList);
+        System.out.println(SenTerm.mapToString[re]);
+        LogUtil.log(SenTerm.mapToString[re]);
     }
 //        System.out.
 

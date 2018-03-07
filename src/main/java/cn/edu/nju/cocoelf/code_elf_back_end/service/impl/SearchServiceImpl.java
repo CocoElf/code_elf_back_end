@@ -210,7 +210,7 @@ public class SearchServiceImpl implements SearchService {
      * 将用户输入的语句进行分类
      * @return
      */
-    private int classify( List<Term> termList){
+    public int classify( List<Term> termList){
         List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t->!t.equals("null")).collect(Collectors.toList());
         SenTerm senTerm = new SenTerm();
         senTerm.tokens = new String[tagList.size()];
