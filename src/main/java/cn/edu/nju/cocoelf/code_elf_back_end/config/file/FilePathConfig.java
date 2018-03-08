@@ -26,7 +26,7 @@ public class FilePathConfig extends WebMvcConfigurerAdapter {
                 String[] split = str.split(":");
                 developerPror.put(split[0],split[1]);
             }
-            AVATAR_URL = "http://"+developerPror.get("host")+":8081/api/";
+//            AVATAR_URL = "http://"+developerPror.get("host")+":8081/api/";
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -320,7 +320,7 @@ public class SearchServiceImpl implements SearchService {
 
     private String getPath(String lan, String version){
         version = "3";
-        String path = FilePathConfig.AVATAR_URL+ lan + version+"/library/";
+        String path = FilePathConfig.AVATAR_URL.substring(16)+ lan + version+"/library/";
         return path;
     }
 }
