@@ -9,8 +9,11 @@ list	class	3
 file	class	3
 string	class	3
 string	class	3
-os  class	3
+os	class	3
 str	class	3
+sys	class	3
+操作系统	class	3
+系统调用	class	3
 function	class	3
 int	in	3
 dict	in	3
@@ -24,4 +27,6 @@ setattr	in	3
 open	in	3
 sum	in	3
 len	in	3
+pow	in	3
+dir	in	3
 input	in	3

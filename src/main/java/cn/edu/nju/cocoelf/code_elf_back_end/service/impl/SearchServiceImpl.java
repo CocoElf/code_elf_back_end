@@ -58,6 +58,7 @@ public class SearchServiceImpl implements SearchService {
         // record
 //        recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
+        LogUtil.log(keyWord);
 
         List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
         int type = classify(termList);
@@ -271,7 +272,7 @@ public class SearchServiceImpl implements SearchService {
             if(!begin && !term.getNatureStr().equals("class")){
                 continue;
             }else if(begin){
-                if(Arrays.asList("n","nv","v").contains(term.getNatureStr()))
+                if(Arrays.asList("n","nv","v","d","a").contains(term.getNatureStr()))
                     list.add(term.getName());
             }else{
                 begin = true;

@@ -6,6 +6,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.WebSearchStub;
+import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +33,8 @@ public class SearchController {
             @ApiImplicitParam(name = "keyWord", value = "关键词", required = true, dataType = "String"),})
     @PostMapping("/queryWithWord")
     public List<SearchResultModel> queryWithWord(String keyWord, String username) {
-        return null;
+        assert keyWord!=null:"can not pass parameter";
+        return searchService.searchWithWord(keyWord,username);
     }
 
     @ApiOperation(value = "将图片转换成文字")
