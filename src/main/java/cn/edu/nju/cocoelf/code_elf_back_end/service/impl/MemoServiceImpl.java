@@ -7,6 +7,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.repository.MemoRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.FileUtil;
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -92,7 +93,7 @@ public class MemoServiceImpl implements MemoService {
         }
         MemoModel memoModel = new MemoModel();
         memoModel.setDate(memo.getDate());
-//        memoModel.setKeywords(memo.getKeyWord());
+        memoModel.setKeywords(JSON.parseArray(memo.getKeyWord(), String.class));
         memoModel.setMemoId(memo.getMemoId());
         memoModel.setSnippet(memo.getSnippet());
         memoModel.setContent(FileUtil.readFile(memo.getContentPath()));
@@ -116,9 +117,9 @@ public class MemoServiceImpl implements MemoService {
         if (memoModel.getDate() != null) {
             memo.setDate(memoModel.getDate());
         }
-//        if (memoModel.getKeyWord() != null) {
-//            memo.setKeyWord(memoModel.getKeyWord());
-//        }
+        if (memoModel.getKeywords() != null) {
+            memo.setKeyWord(JSON.toJSONString(memoModel.getKeywords()));
+        }
         if (memoModel.getName() != null) {
             memo.setSnippet(memoModel.getName());
         }

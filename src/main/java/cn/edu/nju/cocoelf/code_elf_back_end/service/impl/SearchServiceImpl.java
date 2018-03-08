@@ -65,6 +65,8 @@ public class SearchServiceImpl implements SearchService {
         Map<String,List<String>> comp = getComponent(termList);
 
         List<? extends SearchResultModel> apiList = new ArrayList<>();
+        List<? extends SearchResultModel> webList = new ArrayList<>();
+
         switch (type){
             case 0:{
                 apiList = apiSearch(keyWord,comp);
@@ -76,16 +78,13 @@ public class SearchServiceImpl implements SearchService {
             }
 
             default:{
-                LogUtil.log("web search");
+               webList = searchWeb(keyWord, type);
             }
         }
 
-        // search web
-//        List<? extends SearchResultModel> webList = searchWeb(keyWord);
-
         // merge
         //TODO add web search
-        return merge(apiList, new ArrayList<>());
+        return merge(apiList, webList);
     }
 
 
@@ -171,9 +170,8 @@ public class SearchServiceImpl implements SearchService {
         return searchResultModelList;
     }
 
+    private List<SearchResultModel> searchWeb(String keyWord, Integer type) {
 
-
-    private List<SearchResultModel> searchWeb(String keyWord) {
         String akeyWord = SearchFilter.convertKeyWord(keyWord);
         String searchResult;
         try {
@@ -247,7 +245,7 @@ public class SearchServiceImpl implements SearchService {
      * @return
      */
     private Map<String,List<String>> getComponent(List<Term> termList){
-        Map<String,List<String>> map = new HashMap<>();;
+        Map<String,List<String>> map = new HashMap<>();
         map.put("lan",new ArrayList<>());
         map.put("in",new ArrayList<>());
         map.put("class",new ArrayList<>());
