@@ -34,7 +34,6 @@ public class FilePathConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-
         registry.addResourceHandler("/api/**").addResourceLocations("file:" + developerPror.get("absPath"));
         super.addResourceHandlers(registry);
     }
