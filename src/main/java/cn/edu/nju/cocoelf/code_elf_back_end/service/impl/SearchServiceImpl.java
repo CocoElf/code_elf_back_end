@@ -19,6 +19,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.KNNModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.SearchUtil;
+import cn.edu.nju.cocoelf.code_elf_back_end.util.TranslateUtil;
 import com.alibaba.fastjson.JSON;
 import org.ansj.domain.Term;
 import org.ansj.splitWord.analysis.DicAnalysis;
@@ -47,6 +48,10 @@ public class SearchServiceImpl implements SearchService {
 
     @Autowired
     PythonAPIDao pythonAPIDao;
+
+    @Autowired
+    TranslateUtil translateUtil;
+
 
     @Override
     public List<SearchResultModel> searchWithWord(String keyWord, String username) {
@@ -251,7 +256,8 @@ public class SearchServiceImpl implements SearchService {
             }else if (term.getNatureStr().equals("in")){
                 map.get("in").add(term.getName());
             }else if (term.getNatureStr().equals("class")){
-                map.get("class").add(term.getName());
+                String name = term.getName();
+                map.get("class").add(translateUtil.translate(name));
             }
         }
 
