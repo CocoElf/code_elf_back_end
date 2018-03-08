@@ -6,3 +6,4 @@ developer是文件夹下应包含：
 developers.txt：2行，xxx为本机下所指的绝对路径
 absPath:api存储的绝对路径
 memoContentPath:备忘录内容存储的绝对路径
+host:你的主机ip地址，填写在网络或者共享配置中显示的ip地址
