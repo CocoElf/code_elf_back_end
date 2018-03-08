@@ -65,6 +65,7 @@ public class MemoServiceImpl implements MemoService {
         }
 
         memo = saveMemo(memo, memoModel.getContent(), username);
+        memoMap.put(username, memo.getMemoId());
 
         return toModel(memo);
     }
