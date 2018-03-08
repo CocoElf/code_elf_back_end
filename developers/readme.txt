@@ -3,5 +3,6 @@
 
 本文件作为其余ignore文件路径
 developer是文件夹下应包含：
-developers.txt：1行，xxx为api在本机下所指的绝对路径
-absPath:xxx
+developers.txt：2行，xxx为本机下所指的绝对路径
+absPath:api存储的绝对路径
+memoContentPath:备忘录内容存储的绝对路径

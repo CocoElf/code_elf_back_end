@@ -5,18 +5,16 @@ import cn.edu.nju.cocoelf.code_elf_back_end.entity.StubApi;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
-import cn.edu.nju.cocoelf.code_elf_back_end.repository.PythonAPIDao;
-
 import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
-
+import cn.edu.nju.cocoelf.code_elf_back_end.repository.PythonAPIDao;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.SearchRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.LanguageService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.component.KNNModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.OCRFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SearchFilter;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.component.SenTerm;
-import cn.edu.nju.cocoelf.code_elf_back_end.service.component.KNNModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.SearchUtil;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.TranslateUtil;
@@ -62,25 +60,28 @@ public class SearchServiceImpl implements SearchService {
 
         List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
         int type = classify(termList);
-        Map<String,List<String>> comp = getComponent(termList);
+        Map<String, List<String>> comp = getComponent(termList);
 
         List<? extends SearchResultModel> apiList = new ArrayList<>();
         List<? extends SearchResultModel> webList = new ArrayList<>();
 
-        switch (type){
-            case 0:{
-                apiList = apiSearch(keyWord,comp);
+        switch (type) {
+            case 0: {
+                apiList = apiSearch(keyWord, comp);
                 break;
             }
-            case 3:{
-                apiList = apiSearchBaseFuntion(keyWord,termList,comp);
+            case 3: {
+                apiList = apiSearchBaseFuntion(keyWord, termList, comp);
                 break;
             }
-
-            default:{
-               webList = searchWeb(keyWord, type);
+            default: {
+                break;
             }
         }
+        webList = searchWeb(keyWord, type, comp);
+
+        System.out.println("apiList: "  +apiList);
+        System.out.println("webList: "  +webList);
 
         // merge
         //TODO add web search
@@ -95,8 +96,7 @@ public class SearchServiceImpl implements SearchService {
         return ocrFilter.translate(ocr);
     }
 
-    private List<SearchResultModel> merge(List<? extends SearchResultModel> a, List<? extends
-            SearchResultModel> b) {
+    private List<SearchResultModel> merge(List<? extends SearchResultModel> a, List<? extends SearchResultModel> b) {
         List<SearchResultModel> res = new ArrayList<>();
         res.addAll(a);
         res.addAll(b);
@@ -115,62 +115,65 @@ public class SearchServiceImpl implements SearchService {
 
 
     //TODO wait to add sqlite source
-    private List<SearchResultModel> apiSearch(String sen, Map<String,List<String>> map){
+    private List<SearchResultModel> apiSearch(String sen, Map<String, List<String>> map) {
         String language = map.get("lan").get(0);
         String version = getNum(sen);
-        String method =  map.get("class").size() == 0 ? map.get("in").get(0):map.get("class").get(0);
-        List<StubApi> stubApiList = pythonAPIDao.searchResult(method,new ArrayList<>());
+        String method = map.get("class").size() == 0 ? map.get("in").get(0) : map.get("class").get(0);
+        List<StubApi> stubApiList = pythonAPIDao.searchResult(method, new ArrayList<>());
         List<String> keywords = new ArrayList<>();
         keywords.addAll(map.get("lan"));
         keywords.addAll(map.get("in"));
         keywords.addAll(map.get("class"));
-        List<SearchResultModel> searchResultModelList  =
-                stubApiList.stream().map(t->{
-                    SearchResultModel s = new SearchResultModel();
-                    s.setDate(new Date());
-                    s.setKeywords(keywords);
-                    s.setType(t.getType());
-                    s.setSnippet("api查询");
-                    s.setUrl(t.getPage()+t.getPosition());
-                    s.setName(t.getPrint());
-                    return s;
-                }).collect(Collectors.toList());
+        List<SearchResultModel> searchResultModelList = stubApiList.stream().map(t -> {
+            SearchResultModel s = new SearchResultModel();
+            s.setDateLastCrawled(new Date());
+            s.setKeywords(keywords);
+            s.setType(t.getType());
+            s.setSnippet("api查询");
+            s.setUrl(t.getPage() + t.getPosition());
+            s.setName(t.getPrint());
+            return s;
+        }).collect(Collectors.toList());
         return searchResultModelList;
     }
 
     //TODO wait to add sqlite source
-    private List<SearchResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
+    private List<SearchResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String, List<String>>
+            map) {
 //        String language = map.get("lan").get(0);
 //        String version = getNum(sen);
 //        String method  = map.get("class").get(0);
         List<StubApi> stubApiList;
-        if(map.get("class").size()==0){
-            List<String> functions =  getFuntion(termList,true);
-            stubApiList= pythonAPIDao.searchResult("",functions);
-        }else{
-            List<String> functions =  getFuntion(termList,false);
-            stubApiList= pythonAPIDao.searchResult(map.get("class").get(0),functions);
+        if (map.get("class").size() == 0) {
+            List<String> functions = getFuntion(termList, true);
+            stubApiList = pythonAPIDao.searchResult("", functions);
+        } else {
+            List<String> functions = getFuntion(termList, false);
+            stubApiList = pythonAPIDao.searchResult(map.get("class").get(0), functions);
         }
         List<String> keywords = new ArrayList<>();
         keywords.addAll(map.get("lan"));
         keywords.addAll(map.get("in"));
         keywords.addAll(map.get("class"));
-        List<SearchResultModel> searchResultModelList  =
-                stubApiList.stream().map(t->{
-                    SearchResultModel s = new SearchResultModel();
-                    s.setDate(new Date());
-                    s.setKeywords(keywords);
-                    s.setType(t.getType());
-                    s.setSnippet("根据功能查找函数");
-                    s.setUrl(t.getPage()+t.getPosition());
-                    s.setName(t.getPrint());
-                    return s;
-                }).collect(Collectors.toList());
+        List<SearchResultModel> searchResultModelList = stubApiList.stream().map(t -> {
+            SearchResultModel s = new SearchResultModel();
+            s.setDateLastCrawled(new Date());
+            s.setKeywords(keywords);
+            s.setType(t.getType());
+            s.setSnippet("根据功能查找函数");
+            s.setUrl(t.getPage() + t.getPosition());
+            s.setName(t.getPrint());
+            return s;
+        }).collect(Collectors.toList());
 
         return searchResultModelList;
     }
 
-    private List<SearchResultModel> searchWeb(String keyWord, Integer type) {
+    private List<SearchResultModel> searchWeb(String keyWord, Integer type, Map<String, List<String>> map) {
+        List<String> keywords = new ArrayList<>();
+        keywords.addAll(map.get("lan"));
+        keywords.addAll(map.get("in"));
+        keywords.addAll(map.get("class"));
 
         String akeyWord = SearchFilter.convertKeyWord(keyWord);
         String searchResult;
@@ -182,9 +185,27 @@ public class SearchServiceImpl implements SearchService {
         }
         System.out.println(searchResult);
 
+        JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'.0000000Z'";
         List<SearchResultModel> searchResultModelList = JSON.parseArray(searchResult, SearchResultModel.class);
+        searchResultModelList.forEach(element -> {
+            element.setKeywords(keywords);
+            element.setType("web搜索");
+            if (keyWord.contains("exception") || keyWord.contains("error")) {
+                element.setType("异常搜索");
+                keywords.add("exception");
+            }
+            if (element.getDateLastCrawled() == null) {
+                element.setDateLastCrawled(new Date());
+            }
+        });
 
         return SearchFilter.sortAndCutResult(searchResultModelList);
+    }
+
+    public static void main(String... args) {
+        SearchServiceImpl searchService = new SearchServiceImpl();
+        searchService.searchWithWord("UnsupportedOperationException", "");
+//        System.out.println();
     }
 
     private String getNum(String word) {
@@ -216,45 +237,42 @@ public class SearchServiceImpl implements SearchService {
 
     }
 
-    public static void main(String... args) {
-        SearchServiceImpl searchService = new SearchServiceImpl();
-        searchService.searchWithWord("C++11的字符串转化成数字的方法","");
-//        System.out.println(searchService.searchWeb("textview"));
-    }
-
 
     /**
      * 将用户输入的语句进行分类
+     *
      * @return
      */
-    public int classify( List<Term> termList){
-        List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t->!t.equals("null")).collect(Collectors.toList());
+    public int classify(List<Term> termList) {
+        List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t -> !t.equals("null")).collect
+                (Collectors.toList());
         SenTerm senTerm = new SenTerm();
         senTerm.tokens = new String[tagList.size()];
-        for(int i = 0 ; i < senTerm.tokens.length ; i++){
+        for (int i = 0; i < senTerm.tokens.length; i++) {
             senTerm.tokens[i] = tagList.get(i);
         }
-        KNNModel knnModel = new KNNModel("library/dictionary.txt",3);
-        return  knnModel.getType(senTerm);
+        KNNModel knnModel = new KNNModel("library/dictionary.txt", 3);
+        return knnModel.getType(senTerm);
     }
 
 
     /**
      * 解析用户输入语句的关键信息
+     *
      * @param termList
      * @return
      */
-    private Map<String,List<String>> getComponent(List<Term> termList){
-        Map<String,List<String>> map = new HashMap<>();
-        map.put("lan",new ArrayList<>());
-        map.put("in",new ArrayList<>());
-        map.put("class",new ArrayList<>());
-        for(Term term : termList){
-            if(term.getNatureStr().equals("lan")){
+    private Map<String, List<String>> getComponent(List<Term> termList) {
+        Map<String, List<String>> map = new HashMap<>();
+        map.put("lan", new ArrayList<>());
+        map.put("in", new ArrayList<>());
+        map.put("class", new ArrayList<>());
+        for (Term term : termList) {
+            if (term.getNatureStr().equals("lan")) {
                 map.get("lan").add(term.getName());
-            }else if (term.getNatureStr().equals("in")){
+            } else if (term.getNatureStr().equals("in")) {
                 map.get("in").add(term.getName());
-            }else if (term.getNatureStr().equals("class")){
+            } else if (term.getNatureStr().equals("class")) {
                 String name = term.getName();
                 map.get("class").add(translateUtil.translate(name));
             }
@@ -263,16 +281,15 @@ public class SearchServiceImpl implements SearchService {
         return map;
     }
 
-    private List<String> getFuntion(List<Term> termList, boolean builtIn){
+    private List<String> getFuntion(List<Term> termList, boolean builtIn) {
         List<String> list = new ArrayList<>();
         boolean begin = builtIn;
-        for(Term term : termList){
-            if(!begin && !term.getNatureStr().equals("class")){
+        for (Term term : termList) {
+            if (!begin && !term.getNatureStr().equals("class")) {
                 continue;
-            }else if(begin){
-                if(Arrays.asList("n","nv","v","d","a").contains(term.getNatureStr()))
-                    list.add(term.getName());
-            }else{
+            } else if (begin) {
+                if (Arrays.asList("n", "nv", "v", "d", "a").contains(term.getNatureStr())) list.add(term.getName());
+            } else {
                 begin = true;
             }
         }

@@ -1,12 +1,9 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
-import cn.edu.nju.cocoelf.code_elf_back_end.model.QueryResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
-import cn.edu.nju.cocoelf.code_elf_back_end.service.component.WebSearchStub;
-import cn.edu.nju.cocoelf.code_elf_back_end.util.LogUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -24,9 +21,6 @@ public class SearchController {
 
     @Autowired
     private SearchService searchService;
-
-    @Autowired
-    private WebSearchStub webSearchStub;
 
     @ApiOperation(value = "使用文字进行查询")
     @ApiImplicitParams({@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
