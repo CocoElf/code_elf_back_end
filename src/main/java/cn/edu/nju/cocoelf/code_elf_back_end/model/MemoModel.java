@@ -1,7 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.model;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,40 +21,12 @@ public class MemoModel implements Serializable {
 
     private String content;
 
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public MemoModel() {
-    }
-
-    public MemoModel(String name, String url, String snippet, Date date, List<String> keywords, String type, Integer
-            memoId, String content) {
-        this.name = name;
-        this.url = url;
-        this.snippet = snippet;
-        this.date = date;
-        this.keywords = keywords;
-        this.type = type;
-        this.memoId = memoId;
-        this.content = content;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getTitle() {
-        String temp = "[" + type + "]  " + name;
-        return temp.length() > 48 ? temp.substring(0, 45) + "..." : temp;
     }
 
     public String getUrl() {
@@ -82,10 +53,6 @@ public class MemoModel implements Serializable {
         this.date = date;
     }
 
-    public String getFormatDate() {
-        return new SimpleDateFormat("yyyy/MM/ss").format(date);
-    }
-
     public List<String> getKeywords() {
         return keywords;
     }
@@ -108,5 +75,20 @@ public class MemoModel implements Serializable {
 
     public void setMemoId(Integer memoId) {
         this.memoId = memoId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        return "MemoModel{" + "name='" + name + '\'' + ", url='" + url + '\'' + ", snippet='" + snippet + '\'' + ", " +
+                "date=" + date + ", keywords=" + keywords + ", type='" + type + '\'' + ", memoId=" + memoId + ", " +
+                "content='" + content + '\'' + '}';
     }
 }

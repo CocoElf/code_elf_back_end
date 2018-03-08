@@ -16,19 +16,6 @@ public class SearchResultModel implements Serializable {
     private List<String> keywords;
     private String type;
 
-
-    public SearchResultModel() {
-    }
-
-    public SearchResultModel(String name, String url, String snippet, Date dateLastCrawled, List<String> keywords, String type) {
-        this.name = name;
-        this.url = url;
-        this.snippet = snippet;
-        this.dateLastCrawled = dateLastCrawled;
-        this.keywords = keywords;
-        this.type = type;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,10 +46,6 @@ public class SearchResultModel implements Serializable {
 
     public void setDateLastCrawled(Date dateLastCrawled) {
         this.dateLastCrawled = dateLastCrawled;
-    }
-
-    public String getFormatDate() {
-        return new SimpleDateFormat("yyyy/MM/ss").format(dateLastCrawled);
     }
 
     public List<String> getKeywords() {
