@@ -49,7 +49,16 @@ public class PythonAPIDao {
         for (String str : searchFunction ) {
             like += str+"%";
         }
-        String sql = "select * from stub WHERE (class_name=? or package_name=? or NAME = ?) and chinese like ? ";
+
+        String sql = "select * from stub WHERE " +
+                "(class_name=? or package_name=? or NAME = ?) and" +
+                " chinese like ? ";
+
+        if(classOrMethod==null || classOrMethod.trim().equals("")){
+             sql = "select * from stub WHERE " +
+                    "(class_name=? or package_name=? or NAME = ? OR 1=1) and" +
+                    " chinese like ? ";
+        }
         String finalLike = like;
         Object obj = jdbcTemplate.execute(sql, new PreparedStatementCallback() {
 
