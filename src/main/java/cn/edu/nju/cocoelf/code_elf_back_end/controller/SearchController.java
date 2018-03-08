@@ -39,7 +39,7 @@ public class SearchController {
 //        Gson gson = new Gson();
 //        ocr = gson.fromJson(TestParam.testStr, OCR.class);
 //        System.out.println(ocr);
-        return new SearchModel(searchService.imgToWord(ocr, username));
+        return new SearchModel("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: Index: 0, Size: 0");
     }
 
     public static void main(String... args) {
