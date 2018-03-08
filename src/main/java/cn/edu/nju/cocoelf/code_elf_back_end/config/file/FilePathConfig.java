@@ -17,6 +17,8 @@ public class FilePathConfig extends WebMvcConfigurerAdapter {
 
     public static Map<String,String> developerPror = new HashMap<>();
 
+    public static String AVATAR_URL = "http://localhost:8081/api/";
+
     static {
         try {
             List<String> list =  Files.lines(Paths.get("developers/developers.txt")).collect(Collectors.toList());
@@ -24,13 +26,14 @@ public class FilePathConfig extends WebMvcConfigurerAdapter {
                 String[] split = str.split(":");
                 developerPror.put(split[0],split[1]);
             }
+            AVATAR_URL = "http://"+developerPror.get("host")+":8081/api/";
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     //供客户端使用的url前缀
-    public static final String AVATAR_URL = "http://localhost:8081/api/";
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

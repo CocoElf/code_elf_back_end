@@ -28,6 +28,7 @@ public class SearchController {
     @PostMapping("/queryWithWord")
     public List<SearchResultModel> queryWithWord(String keyWord, String username) {
         assert keyWord!=null:"can not pass parameter";
+        System.out.println("keyWord: "+keyWord);
         return searchService.searchWithWord(keyWord,username);
     }
 
