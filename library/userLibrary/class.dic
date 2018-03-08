@@ -7,6 +7,7 @@ collection	class	3
 dict	class	3
 list	class	3
 file	class	3
+time	class	3
 string	class	3
 string	class	3
 os	class	3
@@ -15,6 +16,7 @@ sys	class	3
 操作系统	class	3
 系统调用	class	3
 function	class	3
+datetime	class	2
 int	in	3
 dict	in	3
 help	in	3

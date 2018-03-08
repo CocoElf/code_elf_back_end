@@ -6,7 +6,7 @@
 如何在python中给数组求和 3
 python中的dir函数 0
 python中的pow函数 0
-如何在python中求数组最大值 3
+如何在python中求数组最小值 3
 python中的str类 0
 python中的操作系统模块 0
 python中的字符串如何格式化 3

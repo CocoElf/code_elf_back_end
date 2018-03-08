@@ -1,5 +1,6 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
+import cn.edu.nju.cocoelf.code_elf_back_end.config.file.FilePathConfig;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.Search;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.StubApi;
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
@@ -114,35 +115,41 @@ public class SearchServiceImpl implements SearchService {
     }
 
 
-    //TODO wait to add sqlite source
-    private List<SearchResultModel> apiSearch(String sen, Map<String, List<String>> map) {
+
+    private List<SearchResultModel> apiSearch(String sen, Map<String,List<String>> map){
         String language = map.get("lan").get(0);
         String version = getNum(sen);
-        String method = map.get("class").size() == 0 ? map.get("in").get(0) : map.get("class").get(0);
-        List<StubApi> stubApiList = pythonAPIDao.searchResult(method, new ArrayList<>());
+        String path = getPath(language,version);
+
+        String method =  map.get("class").size() == 0 ? map.get("in").get(0):map.get("class").get(0);
+        List<StubApi> stubApiList = pythonAPIDao.searchResult(method,new ArrayList<>());
+
         List<String> keywords = new ArrayList<>();
         keywords.addAll(map.get("lan"));
         keywords.addAll(map.get("in"));
         keywords.addAll(map.get("class"));
-        List<SearchResultModel> searchResultModelList = stubApiList.stream().map(t -> {
-            SearchResultModel s = new SearchResultModel();
-            s.setDateLastCrawled(new Date());
-            s.setKeywords(keywords);
-            s.setType(t.getType());
-            s.setSnippet("api查询");
-            s.setUrl(t.getPage() + t.getPosition());
-            s.setName(t.getPrint());
-            return s;
-        }).collect(Collectors.toList());
+
+        List<SearchResultModel> searchResultModelList  =
+                stubApiList.stream().map(t->{
+                    SearchResultModel s = new SearchResultModel();
+                    s.setDateLastCrawled(new Date());
+                    s.setKeywords(keywords);
+                    s.setType("api查询");
+                    s.setSnippet(t.getType());
+                    s.setUrl(path+t.getPage()+t.getPosition());
+                    s.setName(t.getPrint());
+                    return s;
+                }).collect(Collectors.toList());
+
         return searchResultModelList;
     }
 
     //TODO wait to add sqlite source
-    private List<SearchResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String, List<String>>
-            map) {
-//        String language = map.get("lan").get(0);
-//        String version = getNum(sen);
-//        String method  = map.get("class").get(0);
+    private List<SearchResultModel> apiSearchBaseFuntion(String sen, List<Term> termList, Map<String,List<String>> map){
+        String language = map.get("lan").get(0);
+        String version = getNum(sen);
+        String path = getPath(language,version);
+
         List<StubApi> stubApiList;
         if (map.get("class").size() == 0) {
             List<String> functions = getFuntion(termList, true);
@@ -155,16 +162,18 @@ public class SearchServiceImpl implements SearchService {
         keywords.addAll(map.get("lan"));
         keywords.addAll(map.get("in"));
         keywords.addAll(map.get("class"));
-        List<SearchResultModel> searchResultModelList = stubApiList.stream().map(t -> {
-            SearchResultModel s = new SearchResultModel();
-            s.setDateLastCrawled(new Date());
-            s.setKeywords(keywords);
-            s.setType(t.getType());
-            s.setSnippet("根据功能查找函数");
-            s.setUrl(t.getPage() + t.getPosition());
-            s.setName(t.getPrint());
-            return s;
-        }).collect(Collectors.toList());
+
+        List<SearchResultModel> searchResultModelList  =
+                stubApiList.stream().map(t->{
+                    SearchResultModel s = new SearchResultModel();
+                    s.setDateLastCrawled(new Date());
+                    s.setKeywords(keywords);
+                    s.setType("根据功能查找函数");
+                    s.setSnippet(t.getType());
+                    s.setUrl(path+t.getPage()+t.getPosition());
+                    s.setName(t.getPrint());
+                    return s;
+                }).collect(Collectors.toList());
 
         return searchResultModelList;
     }
@@ -295,5 +304,11 @@ public class SearchServiceImpl implements SearchService {
         }
 
         return list;
+    }
+
+    private String getPath(String lan, String version){
+        version = "3";
+        String path = FilePathConfig.AVATAR_URL+ lan + version+"/library/";
+        return path;
     }
 }
