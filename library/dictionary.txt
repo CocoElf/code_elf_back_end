@@ -1,3 +1,4 @@
+lan/class 0
 ques/p/lan/f/v/n/n 3
 ques/p/lan/f/p/q/vn 3
 ques/p/lan/n/n/v/v/class 3
@@ -6,6 +7,19 @@ ques/p/lan/f/v/n 3
 ques/p/lan/f/p/n/v 3
 lan/f/uj/in/desc 0
 lan/f/uj/en/desc 0
+ques/p/lan/f/v/n/d/a/n 3
+lan/f/uj/class/q 0
+lan/f/uj/class/desc 0
+lan/f/uj/class/ques/v 3
+lan/f/class/v/n 3
+ques/p/lan/f/v/n/n 3
+ques/p/lan/f/p/q/vn 3
+ques/p/lan/n/n/v/v/class 3
+ques/p/lan/f/v/d/a/n 3
+ques/p/lan/f/v/n 3
+ques/p/lan/f/p/n/v 3
+lan/f/uj/in/desc 0
+lan/f/uj/in/desc 0
 ques/p/lan/f/v/n/d/a/n 3
 lan/f/uj/class/q 0
 lan/f/uj/class/desc 0

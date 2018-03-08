@@ -57,14 +57,22 @@ public class SearchServiceImpl implements SearchService {
         // record
 //        recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
-        LogUtil.log(keyWord);
 
         List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
+        termList.forEach(t->LogUtil.log(t.getNatureStr()));
         int type = classify(termList);
         Map<String, List<String>> comp = getComponent(termList);
+        if(comp.get("lan").size() == 0){
+            type = 5;
+        }
+
+        if(type == 1 &&  comp.get("in").size() == 0 && comp.get("in").size() == 0 ){
+            type = 5;
+        }
 
         List<? extends SearchResultModel> apiList = new ArrayList<>();
         List<? extends SearchResultModel> webList = new ArrayList<>();
+
 
         switch (type) {
             case 0: {
@@ -79,7 +87,11 @@ public class SearchServiceImpl implements SearchService {
                 break;
             }
         }
-        webList = searchWeb(keyWord, type, comp);
+
+        if(apiList.size() == 0){
+            webList = searchWeb(keyWord, type, comp);
+        }
+
 
         System.out.println("apiList: "  +apiList);
         System.out.println("webList: "  +webList);
