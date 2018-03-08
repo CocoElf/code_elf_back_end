@@ -14,6 +14,8 @@ public class Memo {
 
     private String keyWord;
 
+    private String contentPath;
+
     @Column(name = "`date`")
     private Date date;
 
@@ -23,6 +25,14 @@ public class Memo {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "username")
     private User user;
+
+    public String getContentPath() {
+        return contentPath;
+    }
+
+    public void setContentPath(String contentPath) {
+        this.contentPath = contentPath;
+    }
 
     public String getName() {
         return name;
@@ -83,6 +93,7 @@ public class Memo {
     @Override
     public String toString() {
         return "Memo{" + "name='" + name + '\'' + ", snippet='" + snippet + '\'' + ", url='" + url + '\'' + ", " +
-                "keyWord='" + keyWord + '\'' + ", date=" + date + ", memoId=" + memoId + ", user=" + user + '}';
+                "keyWord='" + keyWord + '\'' + ", contentPath='" + contentPath + '\'' + ", date=" + date + ", " +
+                "memoId=" + memoId + ", user=" + user + '}';
     }
 }

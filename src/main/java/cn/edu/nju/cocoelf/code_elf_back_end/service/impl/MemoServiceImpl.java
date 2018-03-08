@@ -6,6 +6,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.MemoRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
+import cn.edu.nju.cocoelf.code_elf_back_end.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +16,14 @@ import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MemoServiceImpl implements MemoService {
+
+    private static Map<String, Integer> memoMap = new HashMap<>();
 
     @Autowired
     private MemoRepository memoRepository;
@@ -53,7 +58,13 @@ public class MemoServiceImpl implements MemoService {
     public MemoModel addMemo(MemoModel memoModel, String username) {
         Memo memo = toEntity(memoModel);
         userService.verifyUsername(username);
-        memo = memoRepository.saveAndFlush(memo);
+
+        if (memoMap.containsKey(username)) {
+            Integer memoId = memoMap.get(username);
+            memo.setMemoId(memoId);
+        }
+
+        memo = saveMemo(memo, memoModel.getContent(), username);
 
         return toModel(memo);
     }
@@ -67,6 +78,13 @@ public class MemoServiceImpl implements MemoService {
     }
 
 
+    private Memo saveMemo(Memo memo, String content, String username) {
+        String contentPath = FileUtil.saveFile(content, username);
+        memo.setContentPath(contentPath);
+        memo = memoRepository.saveAndFlush(memo);
+        return  memo;
+    }
+
     private MemoModel toModel(Memo memo) {
         if (memo == null || memo.getMemoId() == null) {
             throw new ResourceNotFoundException("没有这个备忘录哦");
@@ -76,6 +94,7 @@ public class MemoServiceImpl implements MemoService {
 //        memoModel.setKeywords(memo.getKeyWord());
         memoModel.setMemoId(memo.getMemoId());
         memoModel.setSnippet(memo.getSnippet());
+        memoModel.setContent(FileUtil.readFile(memo.getContentPath()));
         return memoModel;
     }
 

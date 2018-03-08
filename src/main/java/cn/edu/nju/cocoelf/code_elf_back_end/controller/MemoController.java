@@ -2,7 +2,6 @@ package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
-import cn.edu.nju.cocoelf.code_elf_back_end.service.component.MemoStub;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,8 +19,6 @@ public class MemoController {
     @Autowired
     private MemoService memoService;
 
-    @Autowired
-    private MemoStub memoStub;
 
     @ApiOperation(value = "获得用户的备忘录列表")
     @ApiImplicitParams({
@@ -31,7 +28,7 @@ public class MemoController {
     })
     @PostMapping("/memoList")
     public List<MemoModel> getMemoList(String username, Integer pageNum, Integer pageSize) {
-        return memoStub.getMemoList(username, pageNum, pageSize);
+        return memoService.getMemoList(username, pageNum, pageSize);
     }
 
     @ApiOperation(value = "获得用户的指定备忘录详情")
@@ -41,7 +38,7 @@ public class MemoController {
     })
     @PostMapping("/memoDetail")
     public MemoModel getMemoDetail(Integer memoId, String username) {
-        return memoStub.getMemoDetail(memoId, username);
+        return memoService.getMemoDetail(memoId, username);
     }
 
     @ApiOperation(value = "增加备忘录", notes = "返回的备忘录model中会增加memoId，用户每点击一次搜索结果前端都应该调用这个方法")
