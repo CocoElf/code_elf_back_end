@@ -270,6 +270,7 @@ public class SearchServiceImpl implements SearchService {
     public int classify(List<Term> termList) {
         List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t -> !t.equals("null")).collect
                 (Collectors.toList());
+        System.out.println(tagList);
         SenTerm senTerm = new SenTerm();
         senTerm.tokens = new String[tagList.size()];
         for (int i = 0; i < senTerm.tokens.length; i++) {

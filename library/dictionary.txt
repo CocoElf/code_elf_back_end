@@ -1,4 +1,8 @@
 lan/class 0
+lan/class 0
+lan/class 0
+lan/class 0
+lan/class 0
 ques/p/lan/f/v/n/n 3
 ques/p/lan/f/p/q/vn 3
 ques/p/lan/n/n/v/v/class 3
