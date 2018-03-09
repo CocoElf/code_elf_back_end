@@ -50,7 +50,7 @@ public class MemoController {
     })
     @PostMapping("/addMemo/{username}")
     public MemoModel addMemo(@RequestBody MemoModel memoModel, @PathVariable String username) {
-        System.out.println(MemoServiceImpl.memoMap);
+        System.out.println("memoModel: " + memoModel.getType());
         return memoService.addMemo(memoModel, username);
     }
 

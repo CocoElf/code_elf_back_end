@@ -145,7 +145,7 @@ public class MemoServiceImpl implements MemoService {
             memo.setSnippet(memoModel.getSnippet());
         }
         if (memoModel.getType() != null) {
-            memo.setType(memoModel.getSnippet());
+            memo.setType(memoModel.getType());
         }
 
         return memo;

@@ -68,8 +68,9 @@ public class SearchServiceImpl implements SearchService {
         if(comp.get("lan").size() == 0){
             type = 5;
         }
-
-        if(type == 1 &&  comp.get("in").size() == 0 && comp.get("in").size() == 0 ){
+        System.out.println(comp);
+        System.out.println(type);
+        if(type == 0 &&  comp.get("in").size() == 0 && comp.get("class").size() == 0 ){
             type = 5;
         }
 
@@ -96,8 +97,8 @@ public class SearchServiceImpl implements SearchService {
         }
 
 
-        System.out.println("apiList: "  +apiList);
-        System.out.println("webList: "  +webList);
+//        System.out.println("apiList: "  +apiList);
+//        System.out.println("webList: "  +webList);
 
         // merge
         //TODO add web search
