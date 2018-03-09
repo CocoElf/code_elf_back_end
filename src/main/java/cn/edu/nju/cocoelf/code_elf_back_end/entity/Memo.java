@@ -16,10 +16,12 @@ public class Memo {
 
     private String contentPath;
 
-    @Column(name = "`date`")
-    private Date date;
+    private Date memoDate;
+
+    private String type;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer memoId;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH})
@@ -66,12 +68,12 @@ public class Memo {
         this.keyWord = keyWord;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getMemoDate() {
+        return memoDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setMemoDate(Date memoDate) {
+        this.memoDate = memoDate;
     }
 
     public Integer getMemoId() {
@@ -90,10 +92,18 @@ public class Memo {
         this.user = user;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "Memo{" + "name='" + name + '\'' + ", snippet='" + snippet + '\'' + ", url='" + url + '\'' + ", " +
-                "keyWord='" + keyWord + '\'' + ", contentPath='" + contentPath + '\'' + ", date=" + date + ", " +
-                "memoId=" + memoId + ", user=" + user + '}';
+                "keyWord='" + keyWord + '\'' + ", contentPath='" + contentPath + '\'' + ", memoDate=" + memoDate + "," +
+                " type='" + type + '\'' + ", memoId=" + memoId + ", user=" + user + '}';
     }
 }

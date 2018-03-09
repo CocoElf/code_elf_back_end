@@ -10,6 +10,12 @@ public class FileUtil {
         String filePath = developerPror.get("memoContentPath") + username + "/" + System.currentTimeMillis();
         File file = new File(filePath);
         try {
+            if(!file.getParentFile().exists()) {
+                //如果目标文件所在的目录不存在，则创建父目录
+                System.out.println("目标文件所在目录不存在，准备创建它！");
+                file.getParentFile().mkdirs();
+            }
+            file.createNewFile();
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             bw.write(content);
             bw.flush();

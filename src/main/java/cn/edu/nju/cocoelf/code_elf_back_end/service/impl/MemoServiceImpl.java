@@ -1,9 +1,11 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.service.impl;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.entity.Memo;
+import cn.edu.nju.cocoelf.code_elf_back_end.entity.User;
 import cn.edu.nju.cocoelf.code_elf_back_end.exception.InvalidRequestException;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.repository.MemoRepository;
+import cn.edu.nju.cocoelf.code_elf_back_end.repository.UserRepository;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.UserService;
 import cn.edu.nju.cocoelf.code_elf_back_end.util.FileUtil;
@@ -32,9 +34,12 @@ public class MemoServiceImpl implements MemoService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public List<MemoModel> getMemoList(String username, Integer pageNum, Integer pageSize) {
-        Pageable pageable = new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "`date`");
+        Pageable pageable = new PageRequest(pageNum, pageSize, Sort.Direction.DESC, "memoDate");
         Page<Memo> page = memoRepository.findByUser_Username(username, pageable);
         List<MemoModel> memoModelList = new ArrayList<>();
         for (Memo memo : page.getContent()) {
@@ -81,8 +86,10 @@ public class MemoServiceImpl implements MemoService {
 
 
     private Memo saveMemo(Memo memo, String content, String username) {
+        User user = userRepository.findOne(username);
         String contentPath = FileUtil.saveFile(content, username);
         memo.setContentPath(contentPath);
+        memo.setUser(user);
         memo = memoRepository.saveAndFlush(memo);
         return  memo;
     }
@@ -92,11 +99,14 @@ public class MemoServiceImpl implements MemoService {
             throw new ResourceNotFoundException("没有这个备忘录哦");
         }
         MemoModel memoModel = new MemoModel();
-        memoModel.setDate(memo.getDate());
+        memoModel.setDate(memo.getMemoDate());
         memoModel.setKeywords(JSON.parseArray(memo.getKeyWord(), String.class));
         memoModel.setMemoId(memo.getMemoId());
         memoModel.setSnippet(memo.getSnippet());
         memoModel.setContent(FileUtil.readFile(memo.getContentPath()));
+        memoModel.setUrl(memo.getUrl());
+        memoModel.setType(memo.getType());
+        memoModel.setName(memo.getName());
         return memoModel;
     }
 
@@ -115,19 +125,22 @@ public class MemoServiceImpl implements MemoService {
         }
 
         if (memoModel.getDate() != null) {
-            memo.setDate(memoModel.getDate());
+            memo.setMemoDate(memoModel.getDate());
         }
         if (memoModel.getKeywords() != null) {
             memo.setKeyWord(JSON.toJSONString(memoModel.getKeywords()));
         }
         if (memoModel.getName() != null) {
-            memo.setSnippet(memoModel.getName());
+            memo.setName(memoModel.getName());
         }
         if (memoModel.getUrl() != null) {
             memo.setUrl(memoModel.getUrl());
         }
         if (memoModel.getSnippet() != null) {
             memo.setSnippet(memoModel.getSnippet());
+        }
+        if (memoModel.getType() != null) {
+            memo.setType(memoModel.getSnippet());
         }
 
         return memo;

@@ -8,6 +8,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -59,6 +62,28 @@ public class MemoController {
     @PostMapping("/deleteMemo/{username}")
     public Boolean deleteMemo(@RequestBody MemoModel memoModel, @PathVariable String username) {
         return memoService.deleteMemo(memoModel, username);
+    }
+
+    @RequestMapping("/")
+    public String test() {
+        MemoModel memoModel = new MemoModel();
+        memoModel.setContent("123");
+        memoModel.setSnippet("321");
+        memoModel.setDate(new Date());
+        List<String> k = new ArrayList<>();
+        k.add("1");
+        memoModel.setKeywords(k);
+        memoModel.setName("333");
+        memoModel.setType("222");
+        memoModel.setUrl("111");
+        memoModel.setType("444");
+        addMemo(memoModel, "shea");
+
+        System.out.println(getMemoList("shea", "0", "2"));
+
+        System.out.println(getMemoDetail(6, "shea"));
+
+        return "hello";
     }
 
 }
