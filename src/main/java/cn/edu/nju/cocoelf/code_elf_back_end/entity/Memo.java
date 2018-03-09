@@ -104,6 +104,6 @@ public class Memo {
     public String toString() {
         return "Memo{" + "name='" + name + '\'' + ", snippet='" + snippet + '\'' + ", url='" + url + '\'' + ", " +
                 "keyWord='" + keyWord + '\'' + ", contentPath='" + contentPath + '\'' + ", memoDate=" + memoDate + "," +
-                " type='" + type + '\'' + ", memoId=" + memoId + ", user=" + user + '}';
+                " type='" + type + '\'' + ", memoId=" + memoId + '}';
     }
 }

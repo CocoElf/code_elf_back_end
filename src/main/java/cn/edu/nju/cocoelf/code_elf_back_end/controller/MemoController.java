@@ -78,10 +78,12 @@ public class MemoController {
         memoModel.setUrl("111");
         memoModel.setType("444");
         addMemo(memoModel, "shea");
+        memoModel.setName("233");
+        addMemo(memoModel, "shea");
 
         System.out.println(getMemoList("shea", "0", "2"));
 
-        System.out.println(getMemoDetail(6, "shea"));
+        System.out.println(getMemoDetail(9, "shea"));
 
         return "hello";
     }

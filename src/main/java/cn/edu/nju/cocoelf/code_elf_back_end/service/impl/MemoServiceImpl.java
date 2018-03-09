@@ -26,7 +26,7 @@ import java.util.Map;
 @Service
 public class MemoServiceImpl implements MemoService {
 
-    private static Map<String, Integer> memoMap = new HashMap<>();
+    public static Map<String, Integer> memoMap = new HashMap<>();
 
     @Autowired
     private MemoRepository memoRepository;
@@ -52,6 +52,7 @@ public class MemoServiceImpl implements MemoService {
     public MemoModel getMemoDetail(Integer memoId, String username) {
         Memo memo = memoRepository.findOne(memoId);
         if (memo == null || memo.getMemoId() == null) {
+            System.out.println("2222222");
             throw new ResourceNotFoundException("没有这个备忘录哦");
         }
         if (!memo.getUser().getUsername().equals(username)) {
@@ -65,10 +66,14 @@ public class MemoServiceImpl implements MemoService {
         Memo memo = toEntity(memoModel);
         userService.verifyUsername(username);
 
+        System.out.println("add memo: " + memo);
+
         if (memoMap.containsKey(username)) {
             Integer memoId = memoMap.get(username);
             memo.setMemoId(memoId);
         }
+
+        System.out.println("add memo2: " + memo);
 
         memo = saveMemo(memo, memoModel.getContent(), username);
         memoMap.put(username, memo.getMemoId());
@@ -96,6 +101,7 @@ public class MemoServiceImpl implements MemoService {
 
     private MemoModel toModel(Memo memo) {
         if (memo == null || memo.getMemoId() == null) {
+            System.out.println("1111111");
             throw new ResourceNotFoundException("没有这个备忘录哦");
         }
         MemoModel memoModel = new MemoModel();

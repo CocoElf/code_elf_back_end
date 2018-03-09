@@ -54,6 +54,9 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public List<SearchResultModel> searchWithWord(String keyWord, String username) {
+        if (MemoServiceImpl.memoMap.containsKey(username)) {
+            MemoServiceImpl.memoMap.remove(username);
+        }
         // record
 //        recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
