@@ -60,6 +60,7 @@ public class SearchServiceImpl implements SearchService {
         // record
 //        recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
+        System.out.println(keyWord);
 
         List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
         termList.forEach(t->LogUtil.log(t.getNatureStr()));
@@ -208,7 +209,7 @@ public class SearchServiceImpl implements SearchService {
             System.out.println(e.getMessage());
             throw new InvalidRequestException("搜索api出bug了");
         }
-        System.out.println(searchResult);
+//        System.out.println(searchResult);
 
         JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'.0000000Z'";
         List<SearchResultModel> searchResultModelList = JSON.parseArray(searchResult, SearchResultModel.class);
@@ -257,7 +258,7 @@ public class SearchServiceImpl implements SearchService {
                 str = "";
             }
         }
-        System.out.println(str);
+//        System.out.println(str);
         return str;
 
     }
@@ -277,7 +278,7 @@ public class SearchServiceImpl implements SearchService {
         for (int i = 0; i < senTerm.tokens.length; i++) {
             senTerm.tokens[i] = tagList.get(i);
         }
-        KNNModel knnModel = new KNNModel("library/dictionary.txt", 3);
+        KNNModel knnModel = new KNNModel("library/dictionary.txt", 1);
         return knnModel.getType(senTerm);
     }
 
