@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,8 +25,8 @@ public class MemoController {
             @ApiImplicitParam(name = "pageSize", value = "每页大小", required = true, dataType = "String"),
     })
     @PostMapping("/memoList")
-    public List<MemoModel> getMemoList(String username, Integer pageNum, Integer pageSize) {
-        return memoService.getMemoList(username, pageNum, pageSize);
+    public List<MemoModel> getMemoList(String username, String pageNum, String pageSize) {
+        return memoService.getMemoList(username, Integer.parseInt(pageNum), Integer.parseInt(pageSize));
     }
 
     @ApiOperation(value = "获得用户的指定备忘录详情")
@@ -46,8 +44,10 @@ public class MemoController {
             @ApiImplicitParam(name = "memoModel", value = "备忘录", required = true, dataType = "MemoModel"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
     })
-    @PostMapping("/addMemo")
-    public MemoModel addMemo(MemoModel memoModel, String username) {
+    @PostMapping("/addMemo/{username}")
+    public MemoModel addMemo(@RequestBody MemoModel memoModel, @PathVariable String username) {
+        System.out.println(memoModel);
+        System.out.println(username);
         return memoService.addMemo(memoModel, username);
     }
 
@@ -56,8 +56,8 @@ public class MemoController {
             @ApiImplicitParam(name = "memoModel", value = "备忘录", required = true, dataType = "MemoModel"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
     })
-    @PostMapping("/deleteMemo")
-    public Boolean deleteMemo(MemoModel memoModel, String username) {
+    @PostMapping("/deleteMemo/{username}")
+    public Boolean deleteMemo(@RequestBody MemoModel memoModel, @PathVariable String username) {
         return memoService.deleteMemo(memoModel, username);
     }
 

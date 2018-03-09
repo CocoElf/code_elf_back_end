@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class MemoModel implements Serializable {
+public class MemoModel {
     private String name;
 
     private String url;
