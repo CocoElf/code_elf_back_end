@@ -38,8 +38,8 @@ public class MemoController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String")
     })
     @PostMapping("/memoDetail")
-    public MemoModel getMemoDetail(Integer memoId, String username) {
-        return memoService.getMemoDetail(memoId, username);
+    public MemoModel getMemoDetail(String memoId, String username) {
+        return memoService.getMemoDetail(Integer.parseInt(memoId), username);
     }
 
     @ApiOperation(value = "增加备忘录", notes = "返回的备忘录model中会增加memoId，用户每点击一次搜索结果前端都应该调用这个方法")
@@ -83,7 +83,7 @@ public class MemoController {
 
         System.out.println(getMemoList("shea", "0", "2"));
 
-        System.out.println(getMemoDetail(9, "shea"));
+        System.out.println(getMemoDetail("9", "shea"));
 
         return "hello";
     }
