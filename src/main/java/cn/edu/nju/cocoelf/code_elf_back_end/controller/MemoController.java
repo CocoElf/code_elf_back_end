@@ -73,6 +73,8 @@ public class MemoController {
         List<String> k = new ArrayList<>();
         k.add("1");
         memoModel.setKeywords(k);
+        String c = "王馨雨";
+
         memoModel.setName("333");
         memoModel.setType("222");
         memoModel.setUrl("111");

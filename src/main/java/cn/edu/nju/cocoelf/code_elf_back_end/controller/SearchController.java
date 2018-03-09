@@ -4,6 +4,7 @@ import cn.edu.nju.cocoelf.code_elf_back_end.model.OCR;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.model.SearchResultModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.SearchService;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -41,6 +42,12 @@ public class SearchController {
 //        ocr = gson.fromJson(TestParam.testStr, OCR.class);
 //        System.out.println(ocr);
         return new SearchModel("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: Index: 0, Size: 0");
+    }
+
+    @RequestMapping("/")
+    public String test() {
+        return JSON.toJSONString(queryWithWord("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: " +
+                "Index: 0, Size: 0", "shea"));
     }
 
     public static void main(String... args) {

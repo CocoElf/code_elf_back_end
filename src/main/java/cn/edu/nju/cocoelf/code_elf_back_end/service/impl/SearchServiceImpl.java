@@ -65,7 +65,7 @@ public class SearchServiceImpl implements SearchService {
         termList.forEach(t->LogUtil.log(t.getNatureStr()));
         int type = classify(termList);
         Map<String, List<String>> comp = getComponent(termList);
-        if(comp.get("lan").size() == 0){
+        if(comp.get("lan").size() == 0 || !comp.get("lan").get(0).equals("python")){
             type = 5;
         }
 
@@ -210,13 +210,16 @@ public class SearchServiceImpl implements SearchService {
         System.out.println(searchResult);
 
         JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'.0000000Z'";
+        System.out.println("searchResult: "  +searchResult);
         List<SearchResultModel> searchResultModelList = JSON.parseArray(searchResult, SearchResultModel.class);
+        if (keyWord.contains("exception") || keyWord.contains("error")) {
+            keywords.add("exception");
+        }
         searchResultModelList.forEach(element -> {
             element.setKeywords(keywords);
             element.setType("web搜索");
             if (keyWord.contains("exception") || keyWord.contains("error")) {
                 element.setType("异常搜索");
-                keywords.add("exception");
             }
             if (element.getDateLastCrawled() == null) {
                 element.setDateLastCrawled(new Date());
