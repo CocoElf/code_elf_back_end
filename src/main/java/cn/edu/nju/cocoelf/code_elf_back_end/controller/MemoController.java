@@ -2,6 +2,7 @@ package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.impl.MemoServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -49,8 +50,7 @@ public class MemoController {
     })
     @PostMapping("/addMemo/{username}")
     public MemoModel addMemo(@RequestBody MemoModel memoModel, @PathVariable String username) {
-        System.out.println(memoModel);
-        System.out.println(username);
+        System.out.println(MemoServiceImpl.memoMap);
         return memoService.addMemo(memoModel, username);
     }
 
