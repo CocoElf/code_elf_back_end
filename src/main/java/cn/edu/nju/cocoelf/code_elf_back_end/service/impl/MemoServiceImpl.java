@@ -62,21 +62,20 @@ public class MemoServiceImpl implements MemoService {
     }
 
     @Override
-    public MemoModel addMemo(MemoModel memoModel, String username) {
+    public synchronized MemoModel addMemo(MemoModel memoModel, String username) {
+        System.out.println("addMemo0 " + memoMap);
         Memo memo = toEntity(memoModel);
         userService.verifyUsername(username);
-
-        System.out.println("add memo: " + memo);
 
         if (memoMap.containsKey(username)) {
             Integer memoId = memoMap.get(username);
             memo.setMemoId(memoId);
         }
 
-        System.out.println("add memo2: " + memo);
-
+        System.out.println("addMemo1 " + memoMap);
         memo = saveMemo(memo, memoModel.getContent(), username);
         memoMap.put(username, memo.getMemoId());
+        System.out.println("addMemo2 " + memoMap);
 
         return toModel(memo);
     }
@@ -146,7 +145,7 @@ public class MemoServiceImpl implements MemoService {
             memo.setSnippet(memoModel.getSnippet());
         }
         if (memoModel.getType() != null) {
-            memo.setType(memoModel.getSnippet());
+            memo.setType(memoModel.getType());
         }
 
         return memo;

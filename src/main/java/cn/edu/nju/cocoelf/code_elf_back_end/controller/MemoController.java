@@ -2,6 +2,7 @@ package cn.edu.nju.cocoelf.code_elf_back_end.controller;
 
 import cn.edu.nju.cocoelf.code_elf_back_end.model.MemoModel;
 import cn.edu.nju.cocoelf.code_elf_back_end.service.MemoService;
+import cn.edu.nju.cocoelf.code_elf_back_end.service.impl.MemoServiceImpl;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -38,8 +39,8 @@ public class MemoController {
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String")
     })
     @PostMapping("/memoDetail")
-    public MemoModel getMemoDetail(Integer memoId, String username) {
-        return memoService.getMemoDetail(memoId, username);
+    public MemoModel getMemoDetail(String memoId, String username) {
+        return memoService.getMemoDetail(Integer.parseInt(memoId), username);
     }
 
     @ApiOperation(value = "增加备忘录", notes = "返回的备忘录model中会增加memoId，用户每点击一次搜索结果前端都应该调用这个方法")
@@ -49,8 +50,7 @@ public class MemoController {
     })
     @PostMapping("/addMemo/{username}")
     public MemoModel addMemo(@RequestBody MemoModel memoModel, @PathVariable String username) {
-        System.out.println(memoModel);
-        System.out.println(username);
+        System.out.println("memoModel: " + memoModel.getType());
         return memoService.addMemo(memoModel, username);
     }
 
@@ -85,7 +85,7 @@ public class MemoController {
 
         System.out.println(getMemoList("shea", "0", "2"));
 
-        System.out.println(getMemoDetail(9, "shea"));
+        System.out.println(getMemoDetail("9", "shea"));
 
         return "hello";
     }

@@ -8,11 +8,10 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,14 +22,16 @@ public class SearchController {
     @Autowired
     private SearchService searchService;
 
+    private Logger logger = LoggerFactory.getLogger(SearchController.class);
+
     @ApiOperation(value = "使用文字进行查询")
     @ApiImplicitParams({@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
             @ApiImplicitParam(name = "keyWord", value = "关键词", required = true, dataType = "String"),})
-    @PostMapping("/queryWithWord")
-    public List<SearchResultModel> queryWithWord(String keyWord, String username) {
+    @PostMapping("/queryWithWord/{username}")
+    public List<SearchResultModel> queryWithWord(@RequestBody SearchModel keyWord, @PathVariable String username) {
         assert keyWord!=null:"can not pass parameter";
-        System.out.println("keyWord: "+keyWord);
-        return searchService.searchWithWord(keyWord,username);
+        logger.info(keyWord.toString());
+        return searchService.searchWithWord(keyWord.getKeyword(),username);
     }
 
     @ApiOperation(value = "将图片转换成文字")

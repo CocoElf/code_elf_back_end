@@ -60,6 +60,7 @@ public class SearchServiceImpl implements SearchService {
         // record
 //        recordSearch(keyWord, username);
         keyWord = keyWord.toLowerCase();
+        System.out.println(keyWord);
 
         List<Term> termList = DicAnalysis.parse(keyWord).getTerms();
         termList.forEach(t->LogUtil.log(t.getNatureStr()));
@@ -68,8 +69,9 @@ public class SearchServiceImpl implements SearchService {
         if(comp.get("lan").size() == 0 || !comp.get("lan").get(0).equals("python")){
             type = 5;
         }
-
-        if(type == 1 &&  comp.get("in").size() == 0 && comp.get("in").size() == 0 ){
+        System.out.println(comp);
+        System.out.println(type);
+        if(type == 0 &&  comp.get("in").size() == 0 && comp.get("class").size() == 0 ){
             type = 5;
         }
 
@@ -96,8 +98,8 @@ public class SearchServiceImpl implements SearchService {
         }
 
 
-        System.out.println("apiList: "  +apiList);
-        System.out.println("webList: "  +webList);
+//        System.out.println("apiList: "  +apiList);
+//        System.out.println("webList: "  +webList);
 
         // merge
         //TODO add web search
@@ -207,7 +209,7 @@ public class SearchServiceImpl implements SearchService {
             System.out.println(e.getMessage());
             throw new InvalidRequestException("搜索api出bug了");
         }
-        System.out.println(searchResult);
+//        System.out.println(searchResult);
 
         JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'.0000000Z'";
         System.out.println("searchResult: "  +searchResult);
@@ -259,7 +261,7 @@ public class SearchServiceImpl implements SearchService {
                 str = "";
             }
         }
-        System.out.println(str);
+//        System.out.println(str);
         return str;
 
     }
@@ -273,12 +275,13 @@ public class SearchServiceImpl implements SearchService {
     public int classify(List<Term> termList) {
         List<String> tagList = termList.stream().map(Term::getNatureStr).filter(t -> !t.equals("null")).collect
                 (Collectors.toList());
+        System.out.println(tagList);
         SenTerm senTerm = new SenTerm();
         senTerm.tokens = new String[tagList.size()];
         for (int i = 0; i < senTerm.tokens.length; i++) {
             senTerm.tokens[i] = tagList.get(i);
         }
-        KNNModel knnModel = new KNNModel("library/dictionary.txt", 3);
+        KNNModel knnModel = new KNNModel("library/dictionary.txt", 1);
         return knnModel.getType(senTerm);
     }
 
