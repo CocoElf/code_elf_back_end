@@ -1,7 +1,7 @@
 如何在python中求数组长度 3
 如何在python中给组排序 3
 如何在python中将数字转化成字符串 3
-如何在python中求最大值 3
+如何在python中求最值 3
 如何在python中求绝对值 3
 如何在python中给数组求和 3
 python中的dir函数 0
