@@ -38,18 +38,19 @@ public class SearchController {
     @ApiImplicitParams({@ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
             @ApiImplicitParam(name = "ocr", value = "查询的图片转成的ocr", required = true, dataType = "String"),})
     @PostMapping("/imgToWord/{username}")
-    public SearchModel imgToWord(OCR ocr, @PathVariable String username) {
+    public SearchModel imgToWord(@RequestBody OCR ocr, @PathVariable String username) {
 //        Gson gson = new Gson();
 //        ocr = gson.fromJson(TestParam.testStr, OCR.class);
-//        System.out.println(ocr);
+        System.out.println(ocr);
+//        logger.info(ocr.toString());
         return new SearchModel("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: Index: 0, Size: 0");
     }
 
-    @RequestMapping("/")
-    public String test() {
-        return JSON.toJSONString(queryWithWord("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: " +
-                "Index: 0, Size: 0", "shea"));
-    }
+//    @RequestMapping("/")
+//    public String test() {
+//        return JSON.toJSONString(queryWithWord("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: " +
+//                "Index: 0, Size: 0", "shea"));
+//    }
 
     public static void main(String... args) {
         System.out.println(new SearchController().imgToWord(null, null));
