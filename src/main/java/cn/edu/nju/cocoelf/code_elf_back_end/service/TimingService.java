@@ -15,4 +15,12 @@ public interface TimingService {
     StatisticModel getStatistic(Date fromDate, Date toDate, String username);
 
     TipModel getTips(CodeType codeType, Long codeTime, String username);
+
+    void startAppTiming(String  timingType,String date,  String username);
+
+    void endAppTiming(String  timingType,String date,  String username);
+
+    void pause(String  timingType,String date,  String username);
+
+    void endPause(String  timingType,String date,  String username);
 }

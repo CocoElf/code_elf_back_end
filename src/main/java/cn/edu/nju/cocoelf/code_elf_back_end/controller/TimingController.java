@@ -8,7 +8,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,50 +56,46 @@ public class TimingController {
     }
 
     @ApiOperation(value = "开始计时(打开APP时调用)")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
-            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
-    })
+    @ApiImplicitParams({@ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType =
+            "TimingType"), @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/startAppTiming")
-    public void startAppTiming(String  timingType,String date,  String username) {
+    public void startAppTiming(String timingType, String date, String username) {
         //例如：START,1520012214036
-        System.out.println(timingType+","+date);
+        System.out.println(timingType + "," + date);
+        timingService.startAppTiming(timingType, date, username);
     }
 
     @ApiOperation(value = "结束及时(关闭APP时调用)")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
-            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
-    })
+    @ApiImplicitParams({@ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType =
+            "TimingType"), @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/endAppTiming")
-    public void endAppTiming(String  timingType,String date, String username) {
+    public void endAppTiming(String timingType, String date, String username) {
         //例如：END,1520012364999
-        System.out.println(timingType+","+date);
+        System.out.println(timingType + "," + date);
+        timingService.endAppTiming(timingType, date, username);
     }
 
     @ApiOperation(value = "暂停计时")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
-            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
-    })
+    @ApiImplicitParams({@ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType =
+            "TimingType"), @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/pause")
-    public void pause(String  timingType,String date,  String username) {
+    public void pause(String timingType, String date, String username) {
         //例如：PAUSE_START,1520012236718
-        System.out.println(timingType+","+date);
+        System.out.println(timingType + "," + date);
+        timingService.pause(timingType, date, username);
     }
 
     @ApiOperation(value = "结束暂停")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType = "TimingType"),
-            @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
-            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),
-    })
+    @ApiImplicitParams({@ApiImplicitParam(name = "timingType", value = "计时类型", required = true, dataType =
+            "TimingType"), @ApiImplicitParam(name = "date", value = "操作时间", required = true, dataType = "Date"),
+            @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
     @PostMapping("/endPause")
-    public void endPause(String  timingType,String date, String username) {
+    public void endPause(String timingType, String date, String username) {
         //例如：PAUSE_END,1520012364331
-        System.out.println(timingType+","+date);
+        System.out.println(timingType + "," + date);
+        timingService.endPause(timingType, date, username);
     }
 }

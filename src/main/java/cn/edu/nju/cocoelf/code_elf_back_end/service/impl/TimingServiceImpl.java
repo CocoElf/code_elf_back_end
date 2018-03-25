@@ -14,19 +14,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TimingServiceImpl implements TimingService {
 
     @Autowired
-    TimeRecordRepository timeRecordRepository;
+    private TimeRecordRepository timeRecordRepository;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    SearchRepository searchRepository;
+    private SearchRepository searchRepository;
+
+    private Map<String, Date> appTimingMap = new HashMap<>();
 
     @Override
     public void startTiming(CodeType codeType, String username) {
@@ -59,14 +63,21 @@ public class TimingServiceImpl implements TimingService {
         Long codeTime = 0L;
         Long debugTime = 0L;
         Long testTime = 0L;
+        Map<Date, Date> timingMap = new HashMap<>();
         for (TimeRecord timeRecord : timeRecordList) {
             switch (timeRecord.getCodeType()) {
                 case CODE:
                     codeTime += (timeRecord.getEndTime().getTime() - timeRecord.getBeginTime().getTime());
+                    break;
                 case TEST:
                     testTime += (timeRecord.getEndTime().getTime() - timeRecord.getBeginTime().getTime());
+                    break;
                 case DEBUG:
                     debugTime += (timeRecord.getEndTime().getTime() - timeRecord.getBeginTime().getTime());
+                    break;
+                case APP:
+                    timingMap.put(timeRecord.getBeginTime(), timeRecord.getEndTime());
+                    break;
             }
         }
 
@@ -78,6 +89,7 @@ public class TimingServiceImpl implements TimingService {
         statisticModel.setToDate(toDate);
         statisticModel.setSearchTimes(searchRepository.countBySearchDateBetween(fromDate, toDate));
         statisticModel.setUsername(username);
+        statisticModel.setTimingMap(timingMap);
 
         return statisticModel;
     }
@@ -95,6 +107,33 @@ public class TimingServiceImpl implements TimingService {
         }
 
         return new TipModel();
+    }
+
+    @Override
+    public void startAppTiming(String timingType, String date, String username) {
+        appTimingMap.put(username, new Date(Long.parseLong(date)));
+    }
+
+    @Override
+    public void endAppTiming(String timingType, String date, String username) {
+        User user = userService.verifyUsername(username);
+        Date toDate = new Date(Long.parseLong(date));
+        TimeRecord timeRecord = new TimeRecord();
+        timeRecord.setUser(user);
+        timeRecord.setBeginTime(appTimingMap.get(username));
+        timeRecord.setEndTime(toDate);
+        timeRecord.setCodeType(CodeType.APP);
+        appTimingMap.remove(username);
+    }
+
+    @Override
+    public void pause(String timingType, String date, String username) {
+        endAppTiming(timingType, date, username);
+    }
+
+    @Override
+    public void endPause(String timingType, String date, String username) {
+        startAppTiming(timingType, date, username);
     }
 
     private TipModel debugTips(Long codeTime) {

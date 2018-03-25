@@ -45,12 +45,6 @@ public class SearchController {
         return new SearchModel("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: Index: 0, Size: 0");
     }
 
-    @RequestMapping("/")
-    public String test() {
-        return JSON.toJSONString(queryWithWord("Exception in thread \"main\" java.lang.IndexOutOfBoundsException: " +
-                "Index: 0, Size: 0", "shea"));
-    }
-
     public static void main(String... args) {
         System.out.println(new SearchController().imgToWord(null, null));
     }
