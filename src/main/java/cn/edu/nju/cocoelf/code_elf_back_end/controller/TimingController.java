@@ -8,9 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
@@ -33,16 +31,16 @@ public class TimingController {
     @ApiOperation(value = "开始某一类型的编程计时")
     @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "CodeType"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
-    @PostMapping("/startTiming")
-    public void startTiming(CodeType codeType, String username) {
+    @PostMapping("/startTiming/{username}")
+    public void startTiming(@RequestBody CodeType codeType, @PathVariable String username) {
         timingService.startTiming(codeType, username);
     }
 
     @ApiOperation(value = "停止某一类型的编程计时", notes = "返回编程时间")
     @ApiImplicitParams({@ApiImplicitParam(name = "codeType", value = "编程类型", required = true, dataType = "CodeType"),
             @ApiImplicitParam(name = "username", value = "用户名", required = true, dataType = "String"),})
-    @PostMapping("/endTiming")
-    public Long endTiming(CodeType codeType, String username) {
+    @PostMapping("/endTiming/{username}")
+    public Long endTiming(@RequestBody CodeType codeType,  @PathVariable String username) {
         return timingService.endTiming(codeType, username);
     }
 

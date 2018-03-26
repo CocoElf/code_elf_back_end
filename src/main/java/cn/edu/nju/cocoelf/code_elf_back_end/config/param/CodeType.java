@@ -1,5 +1,27 @@
 package cn.edu.nju.cocoelf.code_elf_back_end.config.param;
 
 public enum  CodeType {
-    CODE, DEBUG, TEST, APP
+    CODE("编码"), DEBUG("调试"), TEST("测试"), APP("程序");
+
+    public String name;
+    CodeType(String name){
+        this.name=name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
+
+    /**
+     * 字符串转枚举类型
+     */
+    public static CodeType stringToCodeType(String string) {
+        for (CodeType codeType : CodeType.values()) {
+            if (string.equals(codeType.name)) {
+                return codeType;
+            }
+        }
+        return null;
+    }
 }
