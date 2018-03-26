@@ -10,6 +10,7 @@ import java.util.Date;
 public class TimeRecord {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long timeId;
 
     @Temporal(TemporalType.TIMESTAMP)
